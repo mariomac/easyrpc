@@ -1,0 +1,9 @@
+<component name="CopyrightManager">
+  <copyright>
+    <option name="notice" value="----------------------------------------------------------------------------&#10;This code is distributed under a Beer-Ware license&#10;----------------------------------------------------------------------------&#10;Mario Macias wrote this file. Considering this, you can do what the fuck you&#10;want: modify it, distribute it, sell it, etc. But you MUST always credit me&#10;as the original author of this code. In addition, if we met some day and you&#10;think this code was useful to you, you MUST pay me a beer (a good one, if&#10;possible) as reward for my contribution.&#10;&#10;Mario Macias Lloret, 2014&#10;----------------------------------------------------------------------------" />
+    <option name="keyword" value="Copyright" />
+    <option name="allowReplaceKeyword" value="" />
+    <option name="myName" value="BeerWare" />
+    <option name="myLocal" value="true" />
+  </copyright>
+</component>
