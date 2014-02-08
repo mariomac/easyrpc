@@ -13,16 +13,7 @@
  */
 
 import easyrpc.client.Instantiator;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.webapp.WebAppContext;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import easyrpc.test.IFace;
 
 /**
  * Created by mmacias on 08/02/14.
@@ -30,7 +21,7 @@ import java.io.IOException;
 public class Test {
     public static final void main(String[] args) throws Exception {
 
-        Server server = new Server(8080);
+        /*Server server = new Server(8080);
         ServletContextHandler webApp = new ServletContextHandler(ServletContextHandler.SESSIONS);
         webApp.setContextPath("/");
         webApp.addServlet(new ServletHolder(new HttpServlet() {
@@ -41,13 +32,13 @@ public class Test {
             }
         }), "/*");
         server.setHandler(webApp);
-        server.start();
+        server.start();*/
 
         IFace obj = (IFace) new Instantiator().instantiate(IFace.class);
 
         obj.method1(1);
         obj.method2(1,"33");
-        obj.method3(1234L);
+        obj.method3(3L);
         obj.elMetodazoZasca();
 
     }

@@ -12,12 +12,13 @@
  * ----------------------------------------------------------------------------
  */
 
+package easyrpc.formatter;
+
+import javassist.CtMethod;
+
 /**
  * Created by mmacias on 08/02/14.
  */
-public interface IFace {
-    void method1(int param1);
-    Integer method2(float param2, String param3);
-    int method3(Long param1);
-    void elMetodazoZasca();
+public interface Formatter {
+    public void buildMethod(CtMethod m);
 }

@@ -14,12 +14,29 @@
 
 package easyrpc.client;
 
+import easyrpc.formatter.PropertiesHandler;
 import javassist.*;
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.Proxy;
+import javassist.util.proxy.ProxyFactory;
 
 public class Instantiator {
 
     public Object instantiate(Class ifaceClass) {
         try {
+            ProxyFactory factory = new ProxyFactory();
+            factory.setInterfaces(new Class[] { ifaceClass });
+            Class cl = factory.createClass();
+            Object instance = cl.newInstance(); // an object implementing the interface
+            ((Proxy)instance).setHandler(new PropertiesHandler());
+            return instance;
+
+
+            /*factory.setHandler(new PropertiesHandler());
+
+            Class c = factory.createClass();
+
+            Object object = c.newInstance();
             ClassPool cp = ClassPool.getDefault();
             CtClass iface = cp.get(ifaceClass.getName());
             CtClass cl = cp.makeClass(iface.getName()+"Impl");
@@ -30,20 +47,13 @@ public class Instantiator {
                     System.out.println(m.getLongName());
                     CtMethod nm = CtNewMethod.copy(m, cl, null);
                     StringBuilder sb = new StringBuilder("{ System.out.println(\"Se ha llamado a "+m.getName()+"\");");
-                    if(!m.getReturnType().equals(CtClass.voidType)) {
-                        if(m.getReturnType().isPrimitive())
-                            sb.append("return 0;");
-                        else {
-                            sb.append("return null;");
-                        }
-                    }
                     sb.append("}");
                     nm.setBody(sb.toString());
                     cl.addMethod(nm);
                 }
             }
 
-            return cl.toClass().newInstance();
+            return cl.toClass().newInstance();*/
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage(),e);
         }
