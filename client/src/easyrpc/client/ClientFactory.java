@@ -14,11 +14,20 @@
 
 package easyrpc.client;
 
+import easyrpc.client.service.HttpClient;
 import easyrpc.formatter.PropertiesFormatter;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 
-public class Instantiator {
+public class ClientFactory {
+
+    HttpClient client;
+    PropertiesFormatter formatter;
+
+    public ClientFactory(HttpClient client) {
+        this.client = client;
+        formatter = new PropertiesFormatter(client);
+    }
 
     public Object instantiate(Class ifaceClass) {
         try {
@@ -26,7 +35,7 @@ public class Instantiator {
             factory.setInterfaces(new Class[] { ifaceClass });
             Class cl = factory.createClass();
             Object instance = cl.newInstance(); // an object implementing the interface
-            ((Proxy)instance).setHandler(new PropertiesFormatter());
+            ((Proxy)instance).setHandler(formatter);
             return instance;
 
 

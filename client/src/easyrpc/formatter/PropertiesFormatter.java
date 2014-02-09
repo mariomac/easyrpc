@@ -14,6 +14,7 @@
 
 package easyrpc.formatter;
 
+import easyrpc.client.service.HttpClient;
 import javassist.util.proxy.MethodHandler;
 
 import java.lang.reflect.Method;
@@ -31,6 +32,11 @@ public class PropertiesFormatter implements MethodHandler {
     public static final String PARAM_TYPE_ = "paramType.";
     public static final String PARAM_VALUE_ = "paramValue.";
 
+    private HttpClient client;
+
+    public PropertiesFormatter(HttpClient client) {
+        this.client = client;
+    }
 
     @Override
     public Object invoke(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable {
@@ -47,7 +53,9 @@ public class PropertiesFormatter implements MethodHandler {
                     p.setProperty(PARAM_VALUE_+i, args[i].toString());
                 }
             }
-            System.out.println(p.toString());
+            System.out.println("Enviando " + p.toString());
+            client.sendMessage(p.toString());
+
             if(thisMethod.getReturnType().isPrimitive())
                 return 0;
 

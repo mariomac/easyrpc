@@ -53,4 +53,8 @@ public class RPCServer {
         }
     }
 
+    public void start() {
+        serviceLayer.start();
+    }
+
 }

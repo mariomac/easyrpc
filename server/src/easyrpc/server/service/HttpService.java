@@ -14,6 +14,10 @@
 
 package easyrpc.server.service;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,19 +32,24 @@ public class HttpService {
     private int port;
     private String path;
 
-    void start() {
-       /*Server server = new Server(8080);
+    public HttpService(int port, String path) {
+        this.port = port;
+        if(path == null || path.trim().equals("")) {
+            this.path = "/";
+        }
+    }
+
+    public void start() {
+       Server server = new Server(port);
         ServletContextHandler webApp = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        webApp.setContextPath("/");
-        webApp.addServlet(new ServletHolder(new HttpServlet() {
-            @Override
-            protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                resp.setContentType("text/html");
-                resp.getWriter().println("<h1>Mariconazo</h1>");
-            }
-        }), "/*");
+        webApp.setContextPath(path);
+        webApp.addServlet(new ServletHolder(new TheServlet()), "/*");
         server.setHandler(webApp);
-        server.start();*/
+        try {
+            server.start();
+        } catch(Exception e) {
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
 
     class TheServlet extends HttpServlet {

@@ -31,6 +31,7 @@ public class PropertiesReader {
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage(),e);
         }
+        return null;
     }
 
 }
