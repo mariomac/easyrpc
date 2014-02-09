@@ -14,6 +14,7 @@
 
 package easyrpc.marshall;
 
+import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
@@ -25,6 +26,7 @@ public class PropertiesMarshaller {
     public static final String CLASS_NAME = "className";
     public static final String METHOD_NAME = "methodName";
     public static final String RETURN_TYPE = "returnType";
+    public static final String RETURN_VALUE = "returnValue";
     public static final String NUM_PARAMS = "numParams";
     public static final String PARAM_TYPE_ = "paramType.";
     public static final String PARAM_VALUE_ = "paramValue.";
@@ -44,4 +46,35 @@ public class PropertiesMarshaller {
         }
         return p.toString().getBytes();
     }
+
+    public Object unmarshallResponse(byte[] response) {
+        try {
+            Properties p = new Properties();
+            p.load(new StringReader(new String(response)));
+            String returnType = p.getProperty(RETURN_TYPE);
+            String returnValue = p.getProperty(RETURN_VALUE);
+            if(returnValue == null || returnValue.toString().equals("") || returnValue.trim().equals("null"))
+                return null;
+            if (returnType.equals("java.lang.Integer"))
+                return Integer.valueOf(p.getProperty(RETURN_VALUE));
+            if (returnType.equals( "java.lang.Long"))
+                return Long.valueOf(p.getProperty(RETURN_VALUE));
+            if (returnType.equals( "java.lang.Char"))
+                return Integer.valueOf(p.getProperty(RETURN_VALUE));
+            if (returnType.equals( "java.lang.Void"))
+                return 0;
+            if (returnType.equals( "java.lang.Float"))
+                return Float.valueOf(p.getProperty(RETURN_VALUE));
+            if (returnType.equals( "java.lang.Double"))
+                return Double.valueOf(p.getProperty(RETURN_VALUE));
+            if (returnType.equals( "java.lang.String"))
+                return String.valueOf(p.getProperty(RETURN_VALUE));
+
+            throw new Exception("The return type of the method is not supported: " + returnType);
+
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

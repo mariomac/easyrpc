@@ -20,17 +20,17 @@ package easyrpc.test;
 public class Implementation implements IFace {
 
     @Override
-    public int suma(int a, int b) {
+    public int add(int a, int b) {
         return a+b;
     }
 
     @Override
-    public String concatena(String s1, String s2) {
+    public String concat(String s1, String s2) {
         return s1+s2;
     }
 
     @Override
-    public void sacaPorPantalla(String str) {
+    public void doSomeStupidStuff(String str) {
         System.out.println("str = " + str);
     }
 }

@@ -41,7 +41,7 @@ public class HttpClient {
         this.path = path;
     }
 
-    public void sendMessage(String endpoint, byte[] info) {
+    public byte[] sendMessage(String endpoint, byte[] info) {
         try {
             URL endpointUrl = new URL("http",host,port, path + "/" + endpoint);
             HttpURLConnection conn = (HttpURLConnection) endpointUrl.openConnection();
@@ -51,7 +51,10 @@ public class HttpClient {
             dos.write(info);
             dos.flush();
             dos.close();
-            System.out.println("Response code: " + conn.getResponseCode());
+            int numbytes = conn.getInputStream().available();
+            byte[] bytes = new byte[numbytes];
+            conn.getInputStream().read(bytes);
+            return bytes;
         } catch(Exception e) {
             throw new RuntimeException(e);
         }

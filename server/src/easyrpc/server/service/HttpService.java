@@ -74,9 +74,10 @@ public class HttpService extends RpcService {
             String endpoint = req.getPathInfo().substring(1);
 
             try {
-                rpcServer.forwardCall(endpoint,null);
-                resp.getOutputStream().write("Que te follen marica\n".getBytes());
+
+                resp.getOutputStream().write(rpcServer.forwardCall(endpoint, contents.toString().getBytes()));
             } catch (Exception e) {
+                e.printStackTrace();
                 resp.setStatus(400);
                 resp.getOutputStream().write(e.getMessage().getBytes());
             }

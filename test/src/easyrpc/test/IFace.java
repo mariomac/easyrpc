@@ -16,7 +16,7 @@ package easyrpc.test;/*
  * Created by mmacias on 08/02/14.
  */
 public interface IFace {
-    int suma(int a, int b);
-    String concatena(String s1, String s2);
-    void sacaPorPantalla(String str);
+    int add(int a, int b);
+    String concat(String s1, String s2);
+    void doSomeStupidStuff(String str);
 }

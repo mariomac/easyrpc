@@ -59,12 +59,12 @@ public class ClientFactory {
                 byte[] msg = marshaller.marshall(theProxy,thisMethod,superClassMethod,args);
 
                 System.out.println("Enviando " + new String(msg));
-                client.sendMessage(interfaceName,msg);
-
-                if(thisMethod.getReturnType().isPrimitive())
+                byte[] ret = client.sendMessage(interfaceName,msg);
+                System.out.println("new String(ret) = " + new String(ret));
+                return marshaller.unmarshallResponse(ret);
+                /*if(thisMethod.getReturnType().isPrimitive())
                     return 0;
-
-                return null;
+                return null;*/
             } else {
                 return superClassMethod.invoke(theProxy, args);
             }

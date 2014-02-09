@@ -40,10 +40,10 @@ public class Test {
 
         IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new PropertiesMarshaller()).instantiate(IFace.class);
 
-        System.out.println("LLamando a concatena: " + obj.concatena("left","right"));
-        System.out.println("Llamando a suma: " + obj.suma(2,3));
+        System.out.println("LLamando a concat: " + obj.concat("left", "right"));
+        System.out.println("Llamando a add: " + obj.add(2, 3));
         System.out.println("Sacando algo por pantalla: ");
-        obj.sacaPorPantalla("Hola Mundo!");
+        obj.doSomeStupidStuff("Hola Mundo!");
 
     }
 }

@@ -13,8 +13,8 @@ package easyrpc;
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.reader.PropertiesReader;
-import easyrpc.server.service.HttpService;
+import easyrpc.server.service.RpcService;
+import easyrpc.unmarshall.PropertiesUnmarshaller;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,16 +24,18 @@ import java.util.logging.Logger;
 /**
  * Created by mmacias on 08/02/14.
  */
-public class RPCServer {
+public class RpcServer {
     // Key : name of the implementing interfaces
     private Map<String,Object> endpoints = new TreeMap<String, Object>();
 
-    protected HttpService serviceLayer;
-    protected PropertiesReader dataReader;
+    protected RpcService serviceLayer;
+    protected PropertiesUnmarshaller unmarshaller;
 
-    public RPCServer(HttpService serviceLayer, PropertiesReader dataReader) {
+    public RpcServer(RpcService serviceLayer, PropertiesUnmarshaller unmarshaller) {
         this.serviceLayer = serviceLayer;
-        this.dataReader = dataReader;
+        this.unmarshaller = unmarshaller;
+
+        serviceLayer.setRpcServer(this);
     }
 
     public Object getEndpoint(Class iface) {
@@ -45,7 +47,7 @@ public class RPCServer {
         Class[] interfaces = c.getInterfaces();
         for(Class iface : interfaces) {
             if(endpoints.get(iface.getCanonicalName()) != null) {
-                Logger.getLogger(RPCServer.class.getCanonicalName()).log(Level.WARNING,
+                Logger.getLogger(RpcServer.class.getCanonicalName()).log(Level.WARNING,
                         "Registering class " + c.getCanonicalName() + ". Interface "
                                 + iface.getCanonicalName() + " was already registered. Overwriting");
             }
@@ -57,4 +59,14 @@ public class RPCServer {
         serviceLayer.start();
     }
 
+    public PropertiesUnmarshaller getUnmarshaller() {
+        return unmarshaller;
+    }
+
+
+    public byte[] forwardCall(String endpoint, byte[] data) {
+        Object o = endpoints.get(endpoint);
+        if(o == null) throw new RuntimeException("Endpoint " + endpoint + " does not exist");
+        return null;
+    }
 }
