@@ -15,19 +15,23 @@
 package easyrpc.client;
 
 import easyrpc.client.service.HttpClient;
-import easyrpc.formatter.PropertiesFormatter;
+import easyrpc.marshall.PropertiesMarshaller;
+import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
+
+import java.lang.reflect.Method;
 
 public class ClientFactory {
 
     HttpClient client;
-    PropertiesFormatter formatter;
+    PropertiesMarshaller marshaller;
 
-    public ClientFactory(HttpClient client) {
+    public ClientFactory(HttpClient client, PropertiesMarshaller marshaller) {
         this.client = client;
-        formatter = new PropertiesFormatter(client);
+        this.marshaller = marshaller;
     }
+
 
     public Object instantiate(Class ifaceClass) {
         try {
@@ -35,34 +39,35 @@ public class ClientFactory {
             factory.setInterfaces(new Class[] { ifaceClass });
             Class cl = factory.createClass();
             Object instance = cl.newInstance(); // an object implementing the interface
-            ((Proxy)instance).setHandler(formatter);
+            ((Proxy)instance).setHandler(new MethodHandlerImpl(ifaceClass.getCanonicalName()));
             return instance;
-
-
-            /*factory.setHandler(new PropertiesFormatter());
-
-            Class c = factory.createClass();
-
-            Object object = c.newInstance();
-            ClassPool cp = ClassPool.getDefault();
-            CtClass iface = cp.get(ifaceClass.getName());
-            CtClass cl = cp.makeClass(iface.getName()+"Impl");
-            cl.addInterface(iface);
-            cl.addConstructor(CtNewConstructor.defaultConstructor(cl));
-            for(CtMethod m : cl.getMethods()) {
-                if(m.getDeclaringClass() == iface) {
-                    System.out.println(m.getLongName());
-                    CtMethod nm = CtNewMethod.copy(m, cl, null);
-                    StringBuilder sb = new StringBuilder("{ System.out.println(\"Se ha llamado a "+m.getName()+"\");");
-                    sb.append("}");
-                    nm.setBody(sb.toString());
-                    cl.addMethod(nm);
-                }
-            }
-
-            return cl.toClass().newInstance();*/
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage(),e);
+        }
+    }
+
+    class MethodHandlerImpl implements MethodHandler {
+        String interfaceName;
+
+        MethodHandlerImpl(String interfaceName) {
+            this.interfaceName = interfaceName;
+        }
+
+        @Override
+        public Object invoke(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable {
+            if(superClassMethod == null) {
+                byte[] msg = marshaller.marshall(theProxy,thisMethod,superClassMethod,args);
+
+                System.out.println("Enviando " + new String(msg));
+                client.sendMessage(interfaceName,msg);
+
+                if(thisMethod.getReturnType().isPrimitive())
+                    return 0;
+
+                return null;
+            } else {
+                return superClassMethod.invoke(theProxy, args);
+            }
         }
     }
 }

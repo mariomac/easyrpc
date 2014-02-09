@@ -12,10 +12,12 @@
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.RPCServer;
+import easyrpc.RpcServer;
 import easyrpc.client.ClientFactory;
 import easyrpc.client.service.HttpClient;
-import easyrpc.reader.PropertiesReader;
+import easyrpc.marshall.PropertiesMarshaller;
+import easyrpc.test.Implementation;
+import easyrpc.unmarshall.PropertiesUnmarshaller;
 import easyrpc.server.service.HttpService;
 import easyrpc.test.IFace;
 
@@ -28,14 +30,15 @@ public class Test {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                RPCServer server = new RPCServer(new HttpService(8080,null),new PropertiesReader());
+                RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesUnmarshaller());
+                server.addEndpoint(new Implementation());
                 server.start();
             }
         }).start();
 
         Thread.sleep(5000);
 
-        IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/")).instantiate(IFace.class);
+        IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new PropertiesMarshaller()).instantiate(IFace.class);
 
         System.out.println("LLamando a concatena: " + obj.concatena("left","right"));
         System.out.println("Llamando a suma: " + obj.suma(2,3));

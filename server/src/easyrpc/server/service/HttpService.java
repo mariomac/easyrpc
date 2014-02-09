@@ -14,6 +14,7 @@
 
 package easyrpc.server.service;
 
+import easyrpc.client.service.HttpClient;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -28,7 +29,7 @@ import java.io.IOException;
 /**
  * Created by mmacias on 08/02/14.
  */
-public class HttpService {
+public class HttpService extends RpcService {
     private int port;
     private String path;
 
@@ -36,6 +37,8 @@ public class HttpService {
         this.port = port;
         if(path == null || path.trim().equals("")) {
             this.path = "/";
+        } else {
+            this.path = path;
         }
     }
 
@@ -65,7 +68,18 @@ public class HttpService {
                     contents.append(buffer);
                 }
             } while(read != -1);
+
+            System.out.println("Pt: " + req.getPathInfo());
             System.out.println("Received: " + contents.toString());
+            String endpoint = req.getPathInfo().substring(1);
+
+            try {
+                rpcServer.forwardCall(endpoint,null);
+                resp.getOutputStream().write("Que te follen marica\n".getBytes());
+            } catch (Exception e) {
+                resp.setStatus(400);
+                resp.getOutputStream().write(e.getMessage().getBytes());
+            }
         }
     }
 

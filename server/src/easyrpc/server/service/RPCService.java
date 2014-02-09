@@ -12,26 +12,24 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.reader;
+package easyrpc.server.service;
 
-import java.io.StringReader;
-import java.lang.reflect.Method;
-import java.util.Properties;
+import easyrpc.RpcServer;
 
 /**
- * Created by mmacias on 08/02/14.
+ * Created by mmacias on 09/02/14.
  */
-public class PropertiesReader {
-    public Method matchMethod(Object object, String callInfo) {
-        try {
-            Properties properties = new Properties();
-            properties.load(new StringReader(callInfo));
+public abstract class RpcService {
+    protected RpcServer rpcServer;
 
-
-        } catch(Exception e) {
-            throw new RuntimeException(e.getMessage(),e);
-        }
-        return null;
+    public RpcServer getRpcServer() {
+        return rpcServer;
     }
+
+    public void setRpcServer(RpcServer rpcServer) {
+        this.rpcServer = rpcServer;
+    }
+
+    public abstract void start();
 
 }

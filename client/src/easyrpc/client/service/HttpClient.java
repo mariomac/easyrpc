@@ -23,19 +23,32 @@ import java.net.URL;
  * Created by mmacias on 09/02/14.
  */
 public class HttpClient {
-    private URL serverURL;
+    String host, path;
+    int port;
 
     public HttpClient(String host, int port, String path) throws MalformedURLException {
-        serverURL = new URL("http",host,port,path);
+        this.host = host;
+        this.port = port;
+
+        if(path != null) {
+            if(!path.startsWith("/")) {
+                path = "/" + path;
+            }
+            while(path.endsWith("/")) {
+                path = path.substring(0, path.length() - 1 );
+            }
+        }
+        this.path = path;
     }
 
-    public void sendMessage(String info) {
+    public void sendMessage(String endpoint, byte[] info) {
         try {
-            HttpURLConnection conn = (HttpURLConnection)serverURL.openConnection();
+            URL endpointUrl = new URL("http",host,port, path + "/" + endpoint);
+            HttpURLConnection conn = (HttpURLConnection) endpointUrl.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-            dos.write(info.getBytes());
+            dos.write(info);
             dos.flush();
             dos.close();
             System.out.println("Response code: " + conn.getResponseCode());
