@@ -1,7 +1,7 @@
 easyrpc
 =======
 
-Automatic RPC stubs generation for Java (in principle).
+Automatic RPC stubs generation for (initially) Java.
 
 Features:
 * Easy to adopt
