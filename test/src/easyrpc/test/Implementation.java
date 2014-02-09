@@ -12,13 +12,25 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.formatter;
-
-import javassist.CtMethod;
+package easyrpc.test;
 
 /**
  * Created by mmacias on 08/02/14.
  */
-public interface Formatter {
-    public void buildMethod(CtMethod m);
+public class Implementation implements IFace {
+
+    @Override
+    public int suma(int a, int b) {
+        return a+b;
+    }
+
+    @Override
+    public String concatena(String s1, String s2) {
+        return s1+s2;
+    }
+
+    @Override
+    public void sacaPorPantalla(String str) {
+        System.out.println("str = " + str);
+    }
 }

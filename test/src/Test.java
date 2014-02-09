@@ -21,25 +21,14 @@ import easyrpc.test.IFace;
 public class Test {
     public static final void main(String[] args) throws Exception {
 
-        /*Server server = new Server(8080);
-        ServletContextHandler webApp = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        webApp.setContextPath("/");
-        webApp.addServlet(new ServletHolder(new HttpServlet() {
-            @Override
-            protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                resp.setContentType("text/html");
-                resp.getWriter().println("<h1>Mariconazo</h1>");
-            }
-        }), "/*");
-        server.setHandler(webApp);
-        server.start();*/
+
 
         IFace obj = (IFace) new Instantiator().instantiate(IFace.class);
 
-        obj.method1(1);
-        obj.method2(1,"33");
-        obj.method3(3L);
-        obj.elMetodazoZasca();
+        System.out.println("LLamando a concatena: " + obj.concatena("left","right"));
+        System.out.println("Llamando a suma: " + obj.suma(2,3));
+        System.out.println("Sacando algo por pantalla: ");
+        obj.sacaPorPantalla("Hola Mundo!");
 
     }
 }

@@ -14,9 +14,7 @@
 
 package easyrpc.client;
 
-import easyrpc.formatter.PropertiesHandler;
-import javassist.*;
-import javassist.util.proxy.MethodHandler;
+import easyrpc.formatter.PropertiesFormatter;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 
@@ -28,11 +26,11 @@ public class Instantiator {
             factory.setInterfaces(new Class[] { ifaceClass });
             Class cl = factory.createClass();
             Object instance = cl.newInstance(); // an object implementing the interface
-            ((Proxy)instance).setHandler(new PropertiesHandler());
+            ((Proxy)instance).setHandler(new PropertiesFormatter());
             return instance;
 
 
-            /*factory.setHandler(new PropertiesHandler());
+            /*factory.setHandler(new PropertiesFormatter());
 
             Class c = factory.createClass();
 

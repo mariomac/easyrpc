@@ -16,8 +16,7 @@ package easyrpc.test;/*
  * Created by mmacias on 08/02/14.
  */
 public interface IFace {
-    void method1(int param1);
-    Integer method2(float param2, String param3);
-    int method3(Long param1);
-    void elMetodazoZasca();
+    int suma(int a, int b);
+    String concatena(String s1, String s2);
+    void sacaPorPantalla(String str);
 }

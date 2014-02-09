@@ -1,4 +1,3 @@
-package easyrpc;
 /*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
@@ -13,15 +12,25 @@ package easyrpc;
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.server.service.Service;
+package easyrpc.reader;
 
-import java.util.Formatter;
+import java.io.StringReader;
+import java.lang.reflect.Method;
+import java.util.Properties;
 
 /**
  * Created by mmacias on 08/02/14.
  */
-public class Server {
-    protected Service serviceLayer;
-    protected Formatter dataFormatter;
+public class PropertiesReader {
+    public Method matchMethod(Object object, String callInfo) {
+        try {
+            Properties properties = new Properties();
+            properties.load(new StringReader(callInfo));
+
+
+        } catch(Exception e) {
+            throw new RuntimeException(e.getMessage(),e);
+        }
+    }
 
 }
