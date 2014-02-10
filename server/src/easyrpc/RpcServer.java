@@ -13,7 +13,7 @@ package easyrpc;
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.server.service.Rpc_Service;
+import easyrpc.server.service.RpcService;
 import easyrpc.unmarshall.PropertiesUnmarshaller;
 
 import java.util.Map;
@@ -24,14 +24,14 @@ import java.util.logging.Logger;
 /**
  * Created by mmacias on 08/02/14.
  */
-public class Rpc_Server {
+public class RpcServer {
     // Key : name of the implementing interfaces
     private Map<String,Object> endpoints = new TreeMap<String, Object>();
 
-    protected Rpc_Service serviceLayer;
+    protected RpcService serviceLayer;
     protected PropertiesUnmarshaller unmarshaller;
 
-    public Rpc_Server(Rpc_Service serviceLayer, PropertiesUnmarshaller unmarshaller) {
+    public RpcServer(RpcService serviceLayer, PropertiesUnmarshaller unmarshaller) {
         this.serviceLayer = serviceLayer;
         this.unmarshaller = unmarshaller;
 
@@ -47,7 +47,7 @@ public class Rpc_Server {
         Class[] interfaces = c.getInterfaces();
         for(Class iface : interfaces) {
             if(endpoints.get(iface.getCanonicalName()) != null) {
-                Logger.getLogger(Rpc_Server.class.getCanonicalName()).log(Level.WARNING,
+                Logger.getLogger(RpcServer.class.getCanonicalName()).log(Level.WARNING,
                         "Registering class " + c.getCanonicalName() + ". Interface "
                                 + iface.getCanonicalName() + " was already registered. Overwriting");
             }

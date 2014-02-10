@@ -14,19 +14,19 @@
 
 package easyrpc.server.service;
 
-import easyrpc.Rpc_Server;
+import easyrpc.RpcServer;
 
 /**
  * Created by mmacias on 09/02/14.
  */
-public abstract class Rpc_Service {
-    protected Rpc_Server rpcServer;
+public abstract class RpcService {
+    protected RpcServer rpcServer;
 
-    public Rpc_Server getRpcServer() {
+    public RpcServer getRpcServer() {
         return rpcServer;
     }
 
-    public void setRpcServer(Rpc_Server rpcServer) {
+    public void setRpcServer(RpcServer rpcServer) {
         this.rpcServer = rpcServer;
     }
 

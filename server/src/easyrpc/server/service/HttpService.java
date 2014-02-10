@@ -28,7 +28,7 @@ import java.io.IOException;
 /**
  * Created by mmacias on 08/02/14.
  */
-public class HttpService extends Rpc_Service {
+public class HttpService extends RpcService {
     private int port;
     private String path;
 
