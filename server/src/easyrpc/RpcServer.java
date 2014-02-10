@@ -13,10 +13,14 @@ package easyrpc;
  * ----------------------------------------------------------------------------
  */
 
+import easyrpc.marshall.PropertiesMarshaller;
 import easyrpc.server.service.RpcService;
 import easyrpc.unmarshall.PropertiesUnmarshaller;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +71,23 @@ public class RpcServer {
     public byte[] forwardCall(String endpoint, byte[] data) {
         Object o = endpoints.get(endpoint);
         if(o == null) throw new RuntimeException("Endpoint " + endpoint + " does not exist");
-        return null;
+        // todo : LLAMAR A MATCHMETHOD DE UNMARSHALLER
+        // quitar todo esto de properties
+        Properties p = new Properties();
+        try {
+            p.load(new StringReader(new String(data)));
+
+            // mirar cuando la propiedad es un tipo primitivo: int, double, void...
+            Class rt = Class.forName(p.getProperty(PropertiesMarshaller.RETURN_TYPE));
+            Properties rp = new Properties();
+            rp.setProperty(PropertiesMarshaller.RETURN_TYPE,rt.getCanonicalName());
+            if(rt.isPrimitive()) {
+                rp.setProperty(PropertiesMarshaller.RETURN_VALUE,"0");
+            }
+            return rp.toString().getBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }

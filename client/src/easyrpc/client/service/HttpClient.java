@@ -53,8 +53,9 @@ public class HttpClient {
             dos.close();
             int numbytes = conn.getInputStream().available();
             byte[] bytes = new byte[numbytes];
-            conn.getInputStream().read(bytes);
-            return bytes;
+            int read = conn.getInputStream().read(bytes);
+            return read <= 0 ? null : bytes;
+
         } catch(Exception e) {
             throw new RuntimeException(e);
         }

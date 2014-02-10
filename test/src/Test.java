@@ -36,7 +36,7 @@ public class Test {
             }
         }).start();
 
-        Thread.sleep(5000);
+        Thread.sleep(2000);
 
         IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new PropertiesMarshaller()).instantiate(IFace.class);
 

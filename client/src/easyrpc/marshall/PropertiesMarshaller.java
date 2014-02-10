@@ -15,6 +15,7 @@
 package easyrpc.marshall;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
@@ -44,7 +45,10 @@ public class PropertiesMarshaller {
                 p.setProperty(PARAM_VALUE_+i, args[i].toString());
             }
         }
-        return p.toString().getBytes();
+        StringWriter sr = new StringWriter();
+        p.store(sr,null);
+
+        return sr.getBuffer().toString().getBytes();
     }
 
     public Object unmarshallResponse(byte[] response) {
@@ -53,7 +57,9 @@ public class PropertiesMarshaller {
             p.load(new StringReader(new String(response)));
             String returnType = p.getProperty(RETURN_TYPE);
             String returnValue = p.getProperty(RETURN_VALUE);
-            if(returnValue == null || returnValue.toString().equals("") || returnValue.trim().equals("null"))
+            if(returnValue == null
+                    || returnValue.trim().equals("")
+                    || returnValue.trim().equals("null"))
                 return null;
             if (returnType.equals("java.lang.Integer"))
                 return Integer.valueOf(p.getProperty(RETURN_VALUE));
