@@ -73,8 +73,9 @@ public class HttpService extends RpcService {
             String endpoint = req.getPathInfo().substring(1);
 
             try {
-
-                resp.getOutputStream().write(rpcServer.forwardCall(endpoint, contents.toString().getBytes()));
+                byte[] ret = rpcServer.forwardCall(endpoint, contents.toString().getBytes());
+                if(ret!=null)
+                    resp.getOutputStream().write(ret);
             } catch (Exception e) {
                 e.printStackTrace();
                 resp.setStatus(400);
