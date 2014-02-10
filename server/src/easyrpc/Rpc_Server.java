@@ -24,14 +24,14 @@ import java.util.logging.Logger;
 /**
  * Created by mmacias on 08/02/14.
  */
-public class RpcServer {
+public class Rpc_Server {
     // Key : name of the implementing interfaces
     private Map<String,Object> endpoints = new TreeMap<String, Object>();
 
     protected RpcService serviceLayer;
     protected PropertiesUnmarshaller unmarshaller;
 
-    public RpcServer(RpcService serviceLayer, PropertiesUnmarshaller unmarshaller) {
+    public Rpc_Server(RpcService serviceLayer, PropertiesUnmarshaller unmarshaller) {
         this.serviceLayer = serviceLayer;
         this.unmarshaller = unmarshaller;
 
@@ -47,7 +47,7 @@ public class RpcServer {
         Class[] interfaces = c.getInterfaces();
         for(Class iface : interfaces) {
             if(endpoints.get(iface.getCanonicalName()) != null) {
-                Logger.getLogger(RpcServer.class.getCanonicalName()).log(Level.WARNING,
+                Logger.getLogger(Rpc_Server.class.getCanonicalName()).log(Level.WARNING,
                         "Registering class " + c.getCanonicalName() + ". Interface "
                                 + iface.getCanonicalName() + " was already registered. Overwriting");
             }

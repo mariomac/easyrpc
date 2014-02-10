@@ -12,7 +12,7 @@
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.RpcServer;
+import easyrpc.Rpc_Server;
 import easyrpc.client.ClientFactory;
 import easyrpc.client.service.HttpClient;
 import easyrpc.marshall.PropertiesMarshaller;
@@ -30,7 +30,7 @@ public class Test {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesUnmarshaller());
+                Rpc_Server server = new Rpc_Server(new HttpService(8080,"/rpc"),new PropertiesUnmarshaller());
                 server.addEndpoint(new Implementation());
                 server.start();
             }
