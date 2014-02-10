@@ -13,7 +13,7 @@ package easyrpc;
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.server.service.RpcService;
+import easyrpc.server.service.Rpc_Service;
 import easyrpc.unmarshall.PropertiesUnmarshaller;
 
 import java.util.Map;
@@ -28,10 +28,10 @@ public class Rpc_Server {
     // Key : name of the implementing interfaces
     private Map<String,Object> endpoints = new TreeMap<String, Object>();
 
-    protected RpcService serviceLayer;
+    protected Rpc_Service serviceLayer;
     protected PropertiesUnmarshaller unmarshaller;
 
-    public Rpc_Server(RpcService serviceLayer, PropertiesUnmarshaller unmarshaller) {
+    public Rpc_Server(Rpc_Service serviceLayer, PropertiesUnmarshaller unmarshaller) {
         this.serviceLayer = serviceLayer;
         this.unmarshaller = unmarshaller;
 

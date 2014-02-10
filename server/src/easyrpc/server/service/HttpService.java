@@ -14,7 +14,6 @@
 
 package easyrpc.server.service;
 
-import easyrpc.client.service.HttpClient;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -29,7 +28,7 @@ import java.io.IOException;
 /**
  * Created by mmacias on 08/02/14.
  */
-public class HttpService extends RpcService {
+public class HttpService extends Rpc_Service {
     private int port;
     private String path;
 

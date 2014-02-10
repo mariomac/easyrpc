@@ -19,7 +19,7 @@ import easyrpc.Rpc_Server;
 /**
  * Created by mmacias on 09/02/14.
  */
-public abstract class RpcService {
+public abstract class Rpc_Service {
     protected Rpc_Server rpcServer;
 
     public Rpc_Server getRpcServer() {
