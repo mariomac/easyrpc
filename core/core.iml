@@ -7,9 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="client" />
-    <orderEntry type="library" name="org.eclipse.jetty.aggregate:jetty-all-server:8.1.9.v20130131" level="project" />
-    <orderEntry type="library" name="org.javassist:javassist:3.18.1-GA" level="project" />
   </component>
 </module>
 
