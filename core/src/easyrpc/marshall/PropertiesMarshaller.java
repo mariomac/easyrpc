@@ -14,6 +14,9 @@
 
 package easyrpc.marshall;
 
+import easyrpc.util.TypeManager;
+
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -54,30 +57,11 @@ public class PropertiesMarshaller {
     public Object unmarshallResponse(byte[] response) {
         try {
             Properties p = new Properties();
-            p.load(new StringReader(new String(response)));
+            p.load(new ByteArrayInputStream(response));
             String returnType = p.getProperty(RETURN_TYPE);
             String returnValue = p.getProperty(RETURN_VALUE);
-            if(returnValue == null
-                    || returnValue.trim().equals("")
-                    || returnValue.trim().equals("null"))
-                return null;
-            if (returnType.equals("java.lang.Integer"))
-                return Integer.valueOf(p.getProperty(RETURN_VALUE));
-            if (returnType.equals( "java.lang.Long"))
-                return Long.valueOf(p.getProperty(RETURN_VALUE));
-            if (returnType.equals( "java.lang.Char"))
-                return Integer.valueOf(p.getProperty(RETURN_VALUE));
-            if (returnType.equals( "java.lang.Void"))
-                return 0;
-            if (returnType.equals( "java.lang.Float"))
-                return Float.valueOf(p.getProperty(RETURN_VALUE));
-            if (returnType.equals( "java.lang.Double"))
-                return Double.valueOf(p.getProperty(RETURN_VALUE));
-            if (returnType.equals( "java.lang.String"))
-                return String.valueOf(p.getProperty(RETURN_VALUE));
 
-            throw new Exception("The return type of the method is not supported: " + returnType);
-
+            return TypeManager.instantiateValue(returnType, returnValue); 
         } catch(Exception e) {
             throw new RuntimeException(e);
         }

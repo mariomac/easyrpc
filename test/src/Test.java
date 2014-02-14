@@ -26,15 +26,17 @@ import easyrpc.test.IFace;
  */
 public class Test {
     public static final void main(String[] args) throws Exception {
+        final RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesUnmarshaller());
+        server.addEndpoint(new Implementation());
 
-        new Thread(new Runnable() {
+        Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
-                RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesUnmarshaller());
-                server.addEndpoint(new Implementation());
                 server.start();
             }
-        }).start();
+        });
+
+        th.start();
 
         Thread.sleep(2000);
 

@@ -68,8 +68,8 @@ public class HttpService extends RpcService {
                 }
             } while(read != -1);
 
-            System.out.println("Pt: " + req.getPathInfo());
-            System.out.println("Received: " + contents.toString());
+            //System.out.println("Pt: " + req.getPathInfo());
+            //System.out.println("Received: " + contents.toString());
             String endpoint = req.getPathInfo().substring(1);
 
             try {

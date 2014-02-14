@@ -31,6 +31,6 @@ public class Implementation implements IFace {
 
     @Override
     public void doSomeStupidStuff(String str) {
-        System.out.println("str = " + str);
+        System.out.println("doSomeStupidStuff = " + str);
     }
 }

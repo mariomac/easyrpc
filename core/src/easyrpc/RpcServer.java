@@ -16,9 +16,15 @@ package easyrpc;
 import easyrpc.marshall.PropertiesMarshaller;
 import easyrpc.server.service.RpcService;
 import easyrpc.unmarshall.PropertiesUnmarshaller;
+import easyrpc.util.TypeManager;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -68,23 +74,45 @@ public class RpcServer {
     }
 
 
-    public byte[] forwardCall(String endpoint, byte[] data) {
+    public byte[] forwardCall(String endpoint, byte[] data) throws ClassNotFoundException, IOException, InvocationTargetException, IllegalAccessException {
         Object o = endpoints.get(endpoint);
         if(o == null) throw new RuntimeException("Endpoint " + endpoint + " does not exist");
-        // todo : LLAMAR A MATCHMETHOD DE UNMARSHALLER
-        // quitar todo esto de properties
         Properties p = new Properties();
-        try {
-            p.load(new StringReader(new String(data)));
+        p.load(new ByteArrayInputStream(data));
 
-            // mirar cuando la propiedad es un tipo primitivo: int, double, void...
-            Class rt = Class.forName(p.getProperty(PropertiesMarshaller.RETURN_TYPE));
-            Properties rp = new Properties();
-            rp.setProperty(PropertiesMarshaller.RETURN_TYPE,rt.getCanonicalName());
-            if(rt.isPrimitive()) {
-                rp.setProperty(PropertiesMarshaller.RETURN_VALUE,"0");
+        // todo: meter todo esto en PropertiesUnmarshaller
+        Class iface = Class.forName(endpoint);
+        Object returnedObject = null;
+        //System.out.println("Clase a analizar: " + iface.getCanonicalName());
+        for(Method m : iface.getMethods()) {
+            if(m.getName().equals(p.getProperty(PropertiesMarshaller.METHOD_NAME))) {
+                //System.out.println("Llamando a " + m.getName());
+                int numParams = Integer.valueOf(p.getProperty(PropertiesMarshaller.NUM_PARAMS));
+                if(numParams == 0) {
+                    m.invoke(o);
+                } else {
+                    Object[] params = new Object[numParams];
+                    for(int i = 0 ; i < numParams ; i++) {
+                        params[i] = TypeManager.instantiateValue(p.getProperty(PropertiesMarshaller.PARAM_TYPE_+i),p.getProperty(PropertiesMarshaller.PARAM_VALUE_+i));
+                    }
+                    returnedObject = m.invoke(o, params);
+                }
+                break;
             }
-            return rp.toString().getBytes();
+        }
+
+        //o.getClass()
+        try {
+            // mirar cuando la propiedad es un tipo primitivo: int, double, void...
+            Properties rp = new Properties();
+            String returnType = p.getProperty(PropertiesMarshaller.RETURN_TYPE);
+            rp.setProperty(PropertiesMarshaller.RETURN_TYPE,returnType);
+            if(returnedObject != null) {
+                rp.setProperty(PropertiesMarshaller.RETURN_VALUE,returnedObject.toString());
+            }
+            StringWriter sw = new StringWriter();
+            rp.store(sw,null);
+            return sw.getBuffer().toString().getBytes();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
