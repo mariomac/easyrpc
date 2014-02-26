@@ -1,4 +1,4 @@
-package easyrpc.test;/*
+/*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
  * ----------------------------------------------------------------------------
@@ -12,11 +12,15 @@ package easyrpc.test;/*
  * ----------------------------------------------------------------------------
  */
 
+package easyrpc.serialization;
+
+import java.lang.reflect.Method;
+
 /**
- * Created by mmacias on 08/02/14.
+ * Created by mmacias on 26/02/14.
  */
-public interface IFace {
-    int add(int a, int b);
-    String concat(String s1, String s2);
-    void doSomeStupidStuff(String str);
+public interface RPCaller {
+    public Object deserializeResponse(byte[] response);
+    byte[] serializeCall(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable;
+
 }

@@ -14,17 +14,16 @@ package easyrpc;
  */
 
 import easyrpc.marshall.PropertiesMarshaller;
+import easyrpc.serialization.RPCallee;
 import easyrpc.server.service.RpcService;
 import easyrpc.unmarshall.PropertiesUnmarshaller;
 import easyrpc.util.TypeManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -39,11 +38,11 @@ public class RpcServer {
     private Map<String,Object> endpoints = new TreeMap<String, Object>();
 
     protected RpcService serviceLayer;
-    protected PropertiesUnmarshaller unmarshaller;
+    protected RPCallee serializer;
 
-    public RpcServer(RpcService serviceLayer, PropertiesUnmarshaller unmarshaller) {
+    public RpcServer(RpcService serviceLayer, RPCallee serializer) {
         this.serviceLayer = serviceLayer;
-        this.unmarshaller = unmarshaller;
+        this.serializer = serializer;
 
         serviceLayer.setRpcServer(this);
     }
@@ -69,53 +68,16 @@ public class RpcServer {
         serviceLayer.start();
     }
 
-    public PropertiesUnmarshaller getUnmarshaller() {
-        return unmarshaller;
+    public RPCallee getSerializer() {
+        return serializer;
     }
 
 
-    public byte[] forwardCall(String endpoint, byte[] data) throws ClassNotFoundException, IOException, InvocationTargetException, IllegalAccessException {
+    public byte[] forwardCall(String endpoint, byte[] data) {
         Object o = endpoints.get(endpoint);
         if(o == null) throw new RuntimeException("Endpoint " + endpoint + " does not exist");
-        Properties p = new Properties();
-        p.load(new ByteArrayInputStream(data));
 
-        // todo: meter todo esto en PropertiesUnmarshaller
-        Class iface = Class.forName(endpoint);
-        Object returnedObject = null;
-        //System.out.println("Clase a analizar: " + iface.getCanonicalName());
-        for(Method m : iface.getMethods()) {
-            if(m.getName().equals(p.getProperty(PropertiesMarshaller.METHOD_NAME))) {
-                //System.out.println("Llamando a " + m.getName());
-                int numParams = Integer.valueOf(p.getProperty(PropertiesMarshaller.NUM_PARAMS));
-                if(numParams == 0) {
-                    m.invoke(o);
-                } else {
-                    Object[] params = new Object[numParams];
-                    for(int i = 0 ; i < numParams ; i++) {
-                        params[i] = TypeManager.instantiateValue(p.getProperty(PropertiesMarshaller.PARAM_TYPE_+i),p.getProperty(PropertiesMarshaller.PARAM_VALUE_+i));
-                    }
-                    returnedObject = m.invoke(o, params);
-                }
-                break;
-            }
-        }
+        return serializer.matchMethod(o, data);
 
-        //o.getClass()
-        try {
-            // mirar cuando la propiedad es un tipo primitivo: int, double, void...
-            Properties rp = new Properties();
-            String returnType = p.getProperty(PropertiesMarshaller.RETURN_TYPE);
-            rp.setProperty(PropertiesMarshaller.RETURN_TYPE,returnType);
-            if(returnedObject != null) {
-                rp.setProperty(PropertiesMarshaller.RETURN_VALUE,returnedObject.toString());
-            }
-            StringWriter sw = new StringWriter();
-            rp.store(sw,null);
-            return sw.getBuffer().toString().getBytes();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
     }
 }

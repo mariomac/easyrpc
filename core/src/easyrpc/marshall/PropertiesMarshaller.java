@@ -14,57 +14,70 @@
 
 package easyrpc.marshall;
 
+import easyrpc.serialization.RPCallee;
+import easyrpc.unmarshall.PropertiesUnmarshaller;
 import easyrpc.util.TypeManager;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
 /**
  * Simple marshall for testing.
  */
-public class PropertiesMarshaller {
+public class PropertiesMarshaller implements RPCallee {
 
-    public static final String CLASS_NAME = "className";
-    public static final String METHOD_NAME = "methodName";
-    public static final String RETURN_TYPE = "returnType";
-    public static final String RETURN_VALUE = "returnValue";
-    public static final String NUM_PARAMS = "numParams";
-    public static final String PARAM_TYPE_ = "paramType.";
-    public static final String PARAM_VALUE_ = "paramValue.";
-
-    public byte[] marshall(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable {
+    @Override
+    public byte[] matchMethod(Object object, byte[] callInfo) {
         Properties p = new Properties();
-        p.setProperty(PropertiesMarshaller.CLASS_NAME, thisMethod.getDeclaringClass().getCanonicalName());
-        p.setProperty(PropertiesMarshaller.METHOD_NAME, thisMethod.getName());
-        p.setProperty(PropertiesMarshaller.RETURN_TYPE, thisMethod.getReturnType().getCanonicalName());
-        Class[] params = thisMethod.getParameterTypes();
-        if(params != null || params.length == 0) {
-            p.setProperty(PropertiesMarshaller.NUM_PARAMS, ""+params.length);
-            for(int i = 0 ; i < params.length ; i++) {
-                p.setProperty(PARAM_TYPE_+i, params[i].getCanonicalName());
-                p.setProperty(PARAM_VALUE_+i, args[i].toString());
-            }
-        }
-        StringWriter sr = new StringWriter();
-        p.store(sr,null);
+        Object returnedObject = null;
 
-        return sr.getBuffer().toString().getBytes();
-    }
-
-    public Object unmarshallResponse(byte[] response) {
         try {
-            Properties p = new Properties();
-            p.load(new ByteArrayInputStream(response));
-            String returnType = p.getProperty(RETURN_TYPE);
-            String returnValue = p.getProperty(RETURN_VALUE);
+            p.load(new ByteArrayInputStream(callInfo));
 
-            return TypeManager.instantiateValue(returnType, returnValue); 
-        } catch(Exception e) {
+            // todo: meter todo esto en PropertiesUnmarshaller
+            Class iface = object.getClass(); // Class.forname(endpoint)
+            //System.out.println("Clase a analizar: " + iface.getCanonicalName());
+            for(Method m : iface.getMethods()) {
+                if(m.getName().equals(p.getProperty(PropertiesUnmarshaller.METHOD_NAME))) {
+                    //System.out.println("Llamando a " + m.getName());
+                    int numParams = Integer.valueOf(p.getProperty(PropertiesUnmarshaller.NUM_PARAMS));
+                    if(numParams == 0) {
+                        m.invoke(object);
+                    } else {
+                        Object[] params = new Object[numParams];
+                        for(int i = 0 ; i < numParams ; i++) {
+                            params[i] = TypeManager.instantiateValue(p.getProperty(PropertiesUnmarshaller.PARAM_TYPE_+i),p.getProperty(PropertiesUnmarshaller.PARAM_VALUE_+i));
+                        }
+                        returnedObject = m.invoke(object, params);
+                    }
+                    break;
+                }
+            }
+        } catch(IOException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        //o.getClass()
+        try {
+            // mirar cuando la propiedad es un tipo primitivo: int, double, void...
+            Properties rp = new Properties();
+            String returnType = p.getProperty(PropertiesUnmarshaller.RETURN_TYPE);
+            rp.setProperty(PropertiesUnmarshaller.RETURN_TYPE,returnType);
+            if(returnedObject != null) {
+                rp.setProperty(PropertiesUnmarshaller.RETURN_VALUE,returnedObject.toString());
+            }
+            StringWriter sw = new StringWriter();
+            rp.store(sw,null);
+            return sw.getBuffer().toString().getBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
+
 
 }

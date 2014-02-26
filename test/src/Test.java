@@ -16,17 +16,17 @@ import easyrpc.RpcServer;
 import easyrpc.client.ClientFactory;
 import easyrpc.client.service.HttpClient;
 import easyrpc.marshall.PropertiesMarshaller;
-import easyrpc.test.Implementation;
+import test.Implementation;
 import easyrpc.unmarshall.PropertiesUnmarshaller;
 import easyrpc.server.service.HttpService;
-import easyrpc.test.IFace;
+import test.IFace;
 
 /**
  * Created by mmacias on 08/02/14.
  */
 public class Test {
     public static final void main(String[] args) throws Exception {
-        final RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesUnmarshaller());
+        final RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesMarshaller());
         server.addEndpoint(new Implementation());
 
         Thread th = new Thread(new Runnable() {
@@ -40,7 +40,7 @@ public class Test {
 
         Thread.sleep(2000);
 
-        IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new PropertiesMarshaller()).instantiate(IFace.class);
+        IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new PropertiesUnmarshaller()).instantiate(IFace.class);
 
         System.out.println("LLamando a concat: " + obj.concat("left", "right"));
         System.out.println("Llamando a add: " + obj.add(2, 3));

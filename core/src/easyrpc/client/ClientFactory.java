@@ -15,7 +15,7 @@
 package easyrpc.client;
 
 import easyrpc.client.service.HttpClient;
-import easyrpc.marshall.PropertiesMarshaller;
+import easyrpc.serialization.RPCaller;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
@@ -25,11 +25,11 @@ import java.lang.reflect.Method;
 public class ClientFactory {
 
     HttpClient client;
-    PropertiesMarshaller marshaller;
+    RPCaller caller;
 
-    public ClientFactory(HttpClient client, PropertiesMarshaller marshaller) {
+    public ClientFactory(HttpClient client, RPCaller caller) {
         this.client = client;
-        this.marshaller = marshaller;
+        this.caller = caller;
     }
 
 
@@ -56,12 +56,12 @@ public class ClientFactory {
         @Override
         public Object invoke(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable {
             if(superClassMethod == null) {
-                byte[] msg = marshaller.marshall(theProxy,thisMethod,superClassMethod,args);
+                byte[] msg = caller.serializeCall(theProxy, thisMethod, superClassMethod, args);
 
                 //System.out.println("Enviando " + new String(msg));
                 byte[] ret = client.sendMessage(interfaceName,msg);
                 //System.out.println("new String(ret) = " + (ret == null ? null : new String(ret)));
-                return marshaller.unmarshallResponse(ret);
+                return caller.deserializeResponse(ret);
                 /*if(thisMethod.getReturnType().isPrimitive())
                     return 0;
                 return null;*/
