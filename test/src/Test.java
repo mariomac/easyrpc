@@ -16,9 +16,10 @@ import easyrpc.RpcServer;
 import easyrpc.client.ClientFactory;
 import easyrpc.client.service.HttpClient;
 import easyrpc.marshall.PropertiesMarshaller;
+import easyrpc.serialization.JSONCallee;
+import easyrpc.serialization.JSONCaller;
 import org.json.JSONObject;
 import test.Implementation;
-import easyrpc.unmarshall.PropertiesUnmarshaller;
 import easyrpc.server.service.HttpService;
 import test.IFace;
 
@@ -28,16 +29,16 @@ import test.IFace;
 public class Test {
     public static final void main(String[] args) throws Exception {
         JSONObject obj = new JSONObject();
-        obj.accumulate("clave1","valor1");
-        obj.accumulate("clave1","valor1");
+        obj.append("clave1","\"hola\"]}");
+        //obj.accumulate("clave1","valor1");
 
-        System.out.println(obj.toString());
+        //System.out.println(obj.toString());
         main2(args);
 
     }
 
     public static final void main2(String[] args) throws Exception {
-        final RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesMarshaller());
+        final RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new JSONCallee());
         server.addEndpoint(new Implementation());
 
         Thread th = new Thread(new Runnable() {
@@ -51,12 +52,13 @@ public class Test {
 
         Thread.sleep(2000);
 
-        IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new PropertiesUnmarshaller()).instantiate(IFace.class);
+        IFace obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new JSONCaller()).instantiate(IFace.class);
 
-        System.out.println("LLamando a concat: " + obj.concat("left", "right"));
+        //System.out.println("LLamando a concat: " + obj.concat("left", "right"));
         System.out.println("Llamando a add: " + obj.add(2, 3));
         System.out.println("Sacando algo por pantalla: ");
         obj.doSomeStupidStuff("Hola Mundo!");
+        obj.doSomething();
 
     }
 }

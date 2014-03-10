@@ -19,4 +19,5 @@ public interface IFace {
     int add(int a, int b);
     String concat(String s1, String s2);
     void doSomeStupidStuff(String str);
+    void doSomething();
 }

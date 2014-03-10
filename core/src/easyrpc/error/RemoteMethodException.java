@@ -12,15 +12,28 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.serialization;
-
-import java.lang.reflect.Method;
+package easyrpc.error;
 
 /**
- * Created by mmacias on 26/02/14.
+ * Created by mmacias on 10/03/14.
  */
-public interface RPCaller {
-    public Object deserializeResponse(Class returnType, byte[] response);
-    byte[] serializeCall(Object theProxy, Method thisMethod, Object[] args) throws Throwable;
+public class RemoteMethodException extends RuntimeException {
+    public RemoteMethodException() {
+    }
 
+    public RemoteMethodException(String message) {
+        super(message);
+    }
+
+    public RemoteMethodException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public RemoteMethodException(Throwable cause) {
+        super(cause);
+    }
+
+    public RemoteMethodException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

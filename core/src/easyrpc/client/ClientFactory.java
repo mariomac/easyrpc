@@ -57,7 +57,7 @@ public class ClientFactory {
             //System.out.println("Enviando " + new String(msg));
             byte[] ret = client.sendMessage(interfaceName,msg);
             //System.out.println("new String(ret) = " + (ret == null ? null : new String(ret)));
-            return caller.deserializeResponse(ret);
+            return caller.deserializeResponse(thisMethod.getReturnType(), ret);
 
         }
     }

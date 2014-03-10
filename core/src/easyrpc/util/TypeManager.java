@@ -63,6 +63,5 @@ public class TypeManager {
             default:
                 throw new TypeNotPresentException("The return type of the method is not supported: " + typeName,null);
         }
-
     }
 }
