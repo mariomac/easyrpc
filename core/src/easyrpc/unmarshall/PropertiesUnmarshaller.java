@@ -51,7 +51,7 @@ public class PropertiesUnmarshaller implements RPCaller {
     }
 
     @Override
-    public byte[] serializeCall(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable {
+    public byte[] serializeCall(Object theProxy, Method thisMethod, Object[] args) throws Throwable {
         Properties p = new Properties();
         p.setProperty(CLASS_NAME, thisMethod.getDeclaringClass().getCanonicalName());
         p.setProperty(METHOD_NAME, thisMethod.getName());

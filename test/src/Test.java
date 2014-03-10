@@ -16,6 +16,7 @@ import easyrpc.RpcServer;
 import easyrpc.client.ClientFactory;
 import easyrpc.client.service.HttpClient;
 import easyrpc.marshall.PropertiesMarshaller;
+import org.json.JSONObject;
 import test.Implementation;
 import easyrpc.unmarshall.PropertiesUnmarshaller;
 import easyrpc.server.service.HttpService;
@@ -26,6 +27,16 @@ import test.IFace;
  */
 public class Test {
     public static final void main(String[] args) throws Exception {
+        JSONObject obj = new JSONObject();
+        obj.accumulate("clave1","valor1");
+        obj.accumulate("clave1","valor1");
+
+        System.out.println(obj.toString());
+        main2(args);
+
+    }
+
+    public static final void main2(String[] args) throws Exception {
         final RpcServer server = new RpcServer(new HttpService(8080,"/rpc"),new PropertiesMarshaller());
         server.addEndpoint(new Implementation());
 

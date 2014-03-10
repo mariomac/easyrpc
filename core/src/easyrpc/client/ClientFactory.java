@@ -16,11 +16,11 @@ package easyrpc.client;
 
 import easyrpc.client.service.HttpClient;
 import easyrpc.serialization.RPCaller;
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.Proxy;
-import javassist.util.proxy.ProxyFactory;
 
+
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 public class ClientFactory {
 
@@ -35,18 +35,15 @@ public class ClientFactory {
 
     public Object instantiate(Class ifaceClass) {
         try {
-            ProxyFactory factory = new ProxyFactory();
-            factory.setInterfaces(new Class[] { ifaceClass });
-            Class cl = factory.createClass();
-            Object instance = cl.newInstance(); // an object implementing the interface
-            ((Proxy)instance).setHandler(new MethodHandlerImpl(ifaceClass.getCanonicalName()));
+            Object instance = Proxy.newProxyInstance(ifaceClass.getClassLoader(),new Class[]{ifaceClass},
+                            new MethodHandlerImpl(ifaceClass.getCanonicalName()));
             return instance;
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage(),e);
         }
     }
 
-    class MethodHandlerImpl implements MethodHandler {
+    class MethodHandlerImpl implements InvocationHandler {
         String interfaceName;
 
         MethodHandlerImpl(String interfaceName) {
@@ -54,20 +51,14 @@ public class ClientFactory {
         }
 
         @Override
-        public Object invoke(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable {
-            if(superClassMethod == null) {
-                byte[] msg = caller.serializeCall(theProxy, thisMethod, superClassMethod, args);
+        public Object invoke(Object theProxy, Method thisMethod, Object[] args) throws Throwable {
+            byte[] msg = caller.serializeCall(theProxy, thisMethod, args);
 
-                //System.out.println("Enviando " + new String(msg));
-                byte[] ret = client.sendMessage(interfaceName,msg);
-                //System.out.println("new String(ret) = " + (ret == null ? null : new String(ret)));
-                return caller.deserializeResponse(ret);
-                /*if(thisMethod.getReturnType().isPrimitive())
-                    return 0;
-                return null;*/
-            } else {
-                return superClassMethod.invoke(theProxy, args);
-            }
+            //System.out.println("Enviando " + new String(msg));
+            byte[] ret = client.sendMessage(interfaceName,msg);
+            //System.out.println("new String(ret) = " + (ret == null ? null : new String(ret)));
+            return caller.deserializeResponse(ret);
+
         }
     }
 }

@@ -21,6 +21,6 @@ import java.lang.reflect.Method;
  */
 public interface RPCaller {
     public Object deserializeResponse(byte[] response);
-    byte[] serializeCall(Object theProxy, Method thisMethod, Method superClassMethod, Object[] args) throws Throwable;
+    byte[] serializeCall(Object theProxy, Method thisMethod, Object[] args) throws Throwable;
 
 }
