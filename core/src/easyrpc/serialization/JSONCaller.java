@@ -40,7 +40,6 @@ public class JSONCaller implements RPCaller {
             throw new RemoteMethodException(error.toString());
         }
         // todo: convert JAXB XMLs and JSON POJOs
-
         Object result = resp.opt("result");
         return result;
     }
