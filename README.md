@@ -41,11 +41,11 @@ public class Implementation implements IFace {
 }
 ```
     
-**Step 3**: instantiate the server (in the example, it enables the communication through HTTP and marshalls the RPC info within java properties):
+**Step 3**: instantiate the server (in the example, it enables the communication through HTTP and marshalls the RPC info in JSON-RPC 2.0):
 ```java
 RpcServer server = new RpcServer(
                     new HttpService(8080,"/rpc"),
-                    new PropertiesUnmarshaller());
+                    new JSONCallee());
 ```    
 **Step 4**: register the service through the implementing class and start the service
 ```java
@@ -57,11 +57,11 @@ Client side
 
 **Step 1**: get the interface IFace. This must be provided by the service provider by sharing, for example, the source code or a compiled jar binary.
 
-**Step 2**: instantiate the runtime stub generator for the client (in the example, it enables the communication through HTTP and marshalls the RPC info within java properties):
+**Step 2**: instantiate the runtime stub generator for the client (in the example, it enables the communication through HTTP and marshalls the RPC info in JSON-RPC 2.0):
 ```java
 ClientFactory stubGenerator = new ClientFactory(
                                 new HttpClient("server.address.com", 8080, "/rpc"),
-                                new PropertiesMarshaller());
+                                new JSONCaller());
 ```                                    
 **Step 3**: generate a client class:
 ```java
