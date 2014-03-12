@@ -1,4 +1,4 @@
-/*
+package easyrpc.test;/*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
  * ----------------------------------------------------------------------------
@@ -12,16 +12,11 @@
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.RpcServer;
 import easyrpc.client.ClientFactory;
 import easyrpc.client.service.HttpClient;
-import easyrpc.marshall.PropertiesMarshaller;
-import easyrpc.serialization.JSONCallee;
-import easyrpc.serialization.JSONCaller;
-import org.json.JSONObject;
-import test.Implementation;
-import easyrpc.server.service.service.HttpService;
-import test.IFace;
+import easyrpc.server.RpcServer;
+import easyrpc.server.serialization.JSONCallee;
+import easyrpc.server.service.HttpService;
 
 /**
  * Created by mmacias on 08/02/14.

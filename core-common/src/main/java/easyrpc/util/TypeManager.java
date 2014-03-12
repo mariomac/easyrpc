@@ -18,18 +18,18 @@ package easyrpc.util;
  * Created by mmacias on 14/02/14.
  */
 public class TypeManager {
-    public static Object getNullValue(String typeName) {
-        switch(typeName) {
-            case "int":
-            case "char":
-            case "long":
-            case "short":
-            case "byte":
-            case "float":
-            case "double":
-                return 0;
-            default:
-                return null;
+/*    public static Object getNullValue(String typeName) {
+        if("int".equals(typeName) ||
+                "int".equals(typeName) ||
+                "char".equals(typeName) ||
+                "long".equals(typeName) ||
+                "short".equals(typeName) ||
+                "byte".equals(typeName) ||
+                "float".equals(typeName) ||
+                "double".equals(typeName)) {
+            return 0;
+        } else {
+            return null;
         }
     }
 
@@ -39,29 +39,30 @@ public class TypeManager {
                 || value.trim().equals("null")) {
             return TypeManager.getNullValue(typeName);
         }
-        switch (typeName) {
-            case "java.lang.Integer":
-            case "int":
+        if(
+            "java.lang.Integer":
+            "int":
                 return Integer.valueOf(value);
-            case "java.lang.Long":
-            case "long":
+            "java.lang.Long":
+            "long":
                 return Long.valueOf(value);
-            case "java.lang.Char":
-            case "char":
+            "java.lang.Char":
+            "char":
                 return Character.valueOf(value.charAt(0));
-            case "java.lang.Void":
-            case "void":
+            "java.lang.Void":
+            "void":
                 return 0;
-            case "java.lang.Float":
-            case "float":
+            "java.lang.Float":
+            "float":
                 return Float.valueOf(value);
-            case "java.lang.Double":
-            case "double":
+            "java.lang.Double":
+            "double":
                 return Double.valueOf(value);
-            case "java.lang.String":
+            "java.lang.String":
                 return String.valueOf(value);
             default:
                 throw new TypeNotPresentException("The return type of the method is not supported: " + typeName,null);
         }
     }
+    */
 }

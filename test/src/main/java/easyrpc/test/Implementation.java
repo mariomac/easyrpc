@@ -1,4 +1,4 @@
-package test;/*
+/*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
  * ----------------------------------------------------------------------------
@@ -12,12 +12,30 @@ package test;/*
  * ----------------------------------------------------------------------------
  */
 
+package easyrpc.test;
+
 /**
  * Created by mmacias on 08/02/14.
  */
-public interface IFace {
-    int add(int a, int b);
-    String concat(String s1, String s2);
-    void doSomeStupidStuff(String str);
-    void doSomething();
+public class Implementation implements IFace {
+
+    @Override
+    public int add(int a, int b) {
+        return a+b;
+    }
+
+    @Override
+    public String concat(String s1, String s2) {
+        return s1+s2;
+    }
+
+    @Override
+    public void doSomeStupidStuff(String str) {
+        System.out.println("doSomeStupidStuff = " + str);
+    }
+
+    @Override
+    public void doSomething() {
+        System.out.println("Doing something...");
+    }
 }
