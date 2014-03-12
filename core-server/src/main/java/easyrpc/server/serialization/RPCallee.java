@@ -12,24 +12,13 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.server.service;
+package easyrpc.server.serialization;
 
-import easyrpc.RpcServer;
+import java.lang.reflect.Method;
 
 /**
- * Created by mmacias on 09/02/14.
+ * Created by mmacias on 26/02/14.
  */
-public abstract class RpcService {
-    protected RpcServer rpcServer;
-
-    public RpcServer getRpcServer() {
-        return rpcServer;
-    }
-
-    public void setRpcServer(RpcServer rpcServer) {
-        this.rpcServer = rpcServer;
-    }
-
-    public abstract void start();
-
+public interface RPCallee {
+    public byte[] matchMethod(Object object, byte[] callInfo);
 }

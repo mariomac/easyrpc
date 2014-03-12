@@ -12,15 +12,24 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.serialization;
+package easyrpc.server.service;
 
-import java.lang.reflect.Method;
+import easyrpc.server.RpcServer;
 
 /**
- * Created by mmacias on 26/02/14.
+ * Created by mmacias on 09/02/14.
  */
-public interface RPCaller {
-    public Object deserializeResponse(Class returnType, byte[] response);
-    byte[] serializeCall(Object theProxy, Method thisMethod, Object[] args) throws Throwable;
+public abstract class RpcService {
+    protected RpcServer rpcServer;
+
+    public RpcServer getRpcServer() {
+        return rpcServer;
+    }
+
+    public void setRpcServer(RpcServer rpcServer) {
+        this.rpcServer = rpcServer;
+    }
+
+    public abstract void start();
 
 }

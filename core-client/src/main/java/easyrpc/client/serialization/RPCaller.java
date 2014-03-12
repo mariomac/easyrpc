@@ -12,13 +12,15 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.serialization;
+package easyrpc.client.serialization;
 
 import java.lang.reflect.Method;
 
 /**
  * Created by mmacias on 26/02/14.
  */
-public interface RPCallee {
-    public byte[] matchMethod(Object object, byte[] callInfo);
+public interface RPCaller {
+    public Object deserializeResponse(Class returnType, byte[] response);
+    byte[] serializeCall(Object theProxy, Method thisMethod, Object[] args) throws Throwable;
+
 }

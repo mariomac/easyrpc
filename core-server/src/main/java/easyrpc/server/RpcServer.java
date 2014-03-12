@@ -1,4 +1,4 @@
-package easyrpc;
+package easyrpc.server;
 /*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
@@ -13,19 +13,10 @@ package easyrpc;
  * ----------------------------------------------------------------------------
  */
 
-import easyrpc.marshall.PropertiesMarshaller;
-import easyrpc.serialization.RPCallee;
+import easyrpc.server.serialization.RPCallee;
 import easyrpc.server.service.RpcService;
-import easyrpc.unmarshall.PropertiesUnmarshaller;
-import easyrpc.util.TypeManager;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,11 +58,6 @@ public class RpcServer {
     public void start() {
         serviceLayer.start();
     }
-
-    public RPCallee getSerializer() {
-        return serializer;
-    }
-
 
     public byte[] forwardCall(String endpoint, byte[] data) {
         Object o = endpoints.get(endpoint);

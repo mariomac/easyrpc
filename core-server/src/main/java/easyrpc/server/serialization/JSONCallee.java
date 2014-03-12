@@ -12,7 +12,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.serialization;
+package easyrpc.server.serialization;
 
 import easyrpc.error.RemoteMethodException;
 import easyrpc.error.SerializationException;

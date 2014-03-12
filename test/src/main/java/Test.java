@@ -20,7 +20,7 @@ import easyrpc.serialization.JSONCallee;
 import easyrpc.serialization.JSONCaller;
 import org.json.JSONObject;
 import test.Implementation;
-import easyrpc.server.service.HttpService;
+import easyrpc.server.service.service.HttpService;
 import test.IFace;
 
 /**
