@@ -12,13 +12,14 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.server.serialization;
+package easyrpc.server.serialization.jsonrpc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import easyrpc.error.SerializationException;
+import easyrpc.server.serialization.RPCallee;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

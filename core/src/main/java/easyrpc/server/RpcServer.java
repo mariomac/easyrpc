@@ -14,7 +14,7 @@ package easyrpc.server;
  */
 
 import easyrpc.server.serialization.RPCallee;
-import easyrpc.server.transport.RpcService;
+import easyrpc.server.protocol.RpcService;
 
 import java.util.Map;
 import java.util.TreeMap;

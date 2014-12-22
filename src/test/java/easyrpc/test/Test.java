@@ -13,13 +13,12 @@ package easyrpc.test;/*
  */
 
 import easyrpc.client.ClientFactory;
-import easyrpc.client.serialization.JSONCaller;
-import easyrpc.client.transport.HttpClient;
+import easyrpc.client.protocol.http.HttpClient;
+import easyrpc.client.serialization.jsonrpc.JSONCaller;
 import easyrpc.server.RpcServer;
-import easyrpc.server.serialization.JSONCallee;
-import easyrpc.server.transport.HttpService;
+import easyrpc.server.serialization.jsonrpc.JSONCallee;
+import easyrpc.server.protocol.http.HttpService;
 import junit.framework.TestCase;
-import org.junit.Ignore;
 
 import java.util.List;
 import java.util.Map;
@@ -95,7 +94,7 @@ public class Test extends TestCase {
     public void testMaps() {
         Map<String,Integer> wc = obj.wordHistogram("el perro de san roque no tiene rabo perro perro rabo");
         assertNull(wc.get("tralariero"));
-        assertEquals((int)wc.get("el"), 1);
+        assertEquals((int) wc.get("el"), 1);
         assertEquals((int)wc.get("perro"),3);
         assertEquals((int)wc.get("de"),1);
         assertEquals((int)wc.get("san"),1);

@@ -1,4 +1,4 @@
-package easyrpc.test;/*
+/*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
  * ----------------------------------------------------------------------------
@@ -12,19 +12,25 @@ package easyrpc.test;/*
  * ----------------------------------------------------------------------------
  */
 
-import java.util.List;
-import java.util.Map;
+package easyrpc.server.protocol;
+
+import easyrpc.server.RpcServer;
 
 /**
- * Created by mmacias on 08/02/14.
+ * Created by mmacias on 09/02/14.
  */
-public interface IFace {
-    int add(int a, int b);
-    String concat(String s1, String s2);
-    void doSomeStupidStuff(String str);
-    void doSomething();
-    FakeClass getFake(long l, String s, char c, OtherFake o);
-    int[] doubleArray(int[] arr);
-    List<String> asString(int[] arr);
-    Map<String,Integer> wordHistogram(String text);
+public abstract class RpcService {
+    protected RpcServer rpcServer;
+
+    public RpcServer getRpcServer() {
+        return rpcServer;
+    }
+
+    public void setRpcServer(RpcServer rpcServer) {
+        this.rpcServer = rpcServer;
+    }
+
+    public abstract void start();
+    public abstract void stop();
+
 }

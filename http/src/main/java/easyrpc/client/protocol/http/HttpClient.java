@@ -12,7 +12,9 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.client.transport;
+package easyrpc.client.protocol.http;
+
+import easyrpc.server.protocol.RpcClient;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
@@ -22,7 +24,7 @@ import java.net.URL;
 /**
  * Created by mmacias on 09/02/14.
  */
-public class HttpClient {
+public class HttpClient extends RpcClient {
     String host, path;
     int port;
 
@@ -41,6 +43,7 @@ public class HttpClient {
         this.path = path;
     }
 
+    @Override
     public byte[] sendMessage(String endpoint, byte[] info) {
         try {
             URL endpointUrl = new URL("http",host,port, path + "/" + endpoint);

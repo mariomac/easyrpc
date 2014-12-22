@@ -15,8 +15,7 @@
 package easyrpc.client;
 
 import easyrpc.client.serialization.RPCaller;
-import easyrpc.client.transport.HttpClient;
-
+import easyrpc.server.protocol.RpcClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -24,10 +23,10 @@ import java.lang.reflect.Proxy;
 
 public class ClientFactory {
 
-    HttpClient client;
+    RpcClient client;
     RPCaller caller;
 
-    public ClientFactory(HttpClient client, RPCaller caller) {
+    public ClientFactory(RpcClient client, RPCaller caller) {
         this.client = client;
         this.caller = caller;
     }
