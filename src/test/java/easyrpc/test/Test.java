@@ -13,6 +13,7 @@ package easyrpc.test;/*
  */
 
 import easyrpc.client.ClientFactory;
+import easyrpc.client.serialization.JSONCaller;
 import easyrpc.client.service.HttpClient;
 import easyrpc.server.RpcServer;
 import easyrpc.server.serialization.JSONCallee;
@@ -23,8 +24,8 @@ import easyrpc.server.service.HttpService;
  */
 public class Test {
     public static final void main(String[] args) throws Exception {
-        JSONObject obj = new JSONObject();
-        obj.append("clave1","\"hola\"]}");
+        //JSONObject obj = new JSONObject();
+        //obj.append("clave1","\"hola\"]}");
         //obj.accumulate("clave1","valor1");
 
         //System.out.println(obj.toString());
