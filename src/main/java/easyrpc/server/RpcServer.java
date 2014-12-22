@@ -14,7 +14,7 @@ package easyrpc.server;
  */
 
 import easyrpc.server.serialization.RPCallee;
-import easyrpc.server.service.RpcService;
+import easyrpc.server.transport.RpcService;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -58,6 +58,8 @@ public class RpcServer {
     public void start() {
         serviceLayer.start();
     }
+
+    public void stop() { serviceLayer.stop(); }
 
     public byte[] forwardCall(String endpoint, byte[] data) {
         Object o = endpoints.get(endpoint);

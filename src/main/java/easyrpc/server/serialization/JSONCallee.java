@@ -14,74 +14,122 @@
 
 package easyrpc.server.serialization;
 
-import easyrpc.error.RemoteMethodException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import easyrpc.error.SerializationException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
  * Created by mmacias on 10/03/14.
  */
 public class JSONCallee implements RPCallee {
+    private static ObjectMapper MAPPER = new ObjectMapper();
     @Override
     public byte[] matchMethod(Object object, byte[] callInfo) {
-        Object returnedObject = null;
-        JSONObject call = new JSONObject(new String(callInfo));
-        String jsonrpc = call.optString("jsonrpc");
-        if(jsonrpc == null || !"2.0".equals(jsonrpc)) {
-            throw new SerializationException("'jsonrpc' value must be '2.0' and actually is '"+jsonrpc+"'");
-        }
-        String methodName = call.optString("method");
-        if(methodName == null) throw new SerializationException("The 'method' field must not be null: " + call.toString());
+        try {
+            Object returnedObject = null;
+            ObjectNode call = (ObjectNode) MAPPER.readTree(callInfo);
 
-        Class iface = object.getClass();
-        for(Method m : iface.getMethods()) {
-            if(methodName.equals(m.getName())) {
-                JSONArray jsParams = call.optJSONArray("params");
-                if(jsParams == null || jsParams.length() == 0) {
-                    try {
-                        returnedObject = m.invoke(object);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return returnJsonRpcError(call.opt("id"),e);
-                    }
-                } else {
-                    Object[] params = new Object[jsParams.length()];
-                    for(int i = 0 ; i < params.length ; i++) {
-                        params[i] = jsParams.get(i);
-                    }
-                    try {
-                        returnedObject = m.invoke(object,params);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return returnJsonRpcError(call.opt("id"),e);
-                    }
-                }
-                break;
+            String jsonrpc = call.get("jsonrpc").textValue();
+            if (jsonrpc == null || !"2.0".equals(jsonrpc)) {
+                throw new SerializationException("'jsonrpc' value must be '2.0' and actually is: '" + jsonrpc + "'");
             }
-        }
-        JSONObject jsret = new JSONObject();
-        jsret.accumulate("jsonrpc", "2.0");
-        jsret.accumulate("id",call.opt("id"));
-        if(returnedObject != null) {
-            jsret.accumulate("result",returnedObject);
-        }
 
+            String methodName = call.get("method").textValue();
+            if (methodName == null)
+                throw new SerializationException("The 'method' field must not be null: " + call.toString());
 
-        return jsret.toString().getBytes();
+            Class iface = object.getClass();
+            for (Method m : iface.getMethods()) {
+                if (methodName.equals(m.getName())) {
+                    ArrayNode jsParams = (ArrayNode)call.get("params");
+                    if (jsParams == null || jsParams.size() == 0) {
+                        try {
+                            returnedObject = m.invoke(object);
+                            System.out.println("returnedObject = " + returnedObject);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return returnJsonRpcError(call.get("id"), e);
+                        }
+                    } else {
+                        System.out.println("methodName = " + methodName);
+                        Object[] params = new Object[jsParams.size()];
+                        for (int i = 0; i < params.length; i++) {
+                            params[i] = MAPPER.convertValue(jsParams.get(i), m.getParameters()[i].getType());
+                            System.out.println("params[i] = " + params[i] + "("+ params[i].getClass().getName() +")");
+                        }
+                        try {
+                            returnedObject = m.invoke(object, params);
+                            System.out.println("returnedObject = " + returnedObject);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return returnJsonRpcError(call.get("id"), e);
+                        }
+                    }
+                    break;
+                }
+            }
+            ObjectNode jsret = JsonNodeFactory.instance.objectNode();
+            jsret.put("jsonrpc", "2.0");
+            jsret.put("id", call.get("id").toString());
+            if (returnedObject != null) {
+                addResult(jsret,returnedObject);
+            }
+
+            System.out.println("jsret.toString() = " + jsret.toString());
+            return jsret.toString().getBytes();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    private static final void addResult(ObjectNode json, Object value) {
+            switch (value.getClass().getName()) {
+                case "java.lang.Integer":
+                case "int":
+                    json.put("result", (Integer) value);
+                    break;
+                case "java.lang.Long":
+                case "long":
+                    json.put("result",(Long) value);
+                    break;
+                case "java.lang.Character":
+                case "char":
+                    json.put("result", (java.lang.Character) value);
+                    break;
+                case "java.lang.Void":
+                case "void":
+                    throw new IllegalArgumentException("A parameter cannot be of void type");
+                case "java.lang.Float":
+                case "float":
+                    json.put("result", (Float) value);
+                    break;
+                case "java.lang.Double":
+                case "double":
+                    json.put("result",(Double) value);
+                    break;
+                case "java.lang.String":
+                    json.put("result", (String) value);
+                    break;
+                default:
+                    // map an object
+                    ObjectNode retPojo = json.putPOJO("result", MAPPER.valueToTree(value));
+                    System.out.println("retPojo.toString() = " + retPojo.toString());
+            }
+        }
+
     byte[] returnJsonRpcError(Object id, Exception e) {
-        JSONObject object = new JSONObject();
-        object.accumulate("jsonrpc","2.0");
-        object.accumulate("id",id);
-        JSONObject error = new JSONObject();
-        error.accumulate("code",-1);
-        error.accumulate("message", e.getClass().getCanonicalName() +" : " + e.getMessage());
-        object.accumulate("error", error);
+        ObjectNode object = JsonNodeFactory.instance.objectNode();
+        object.put("jsonrpc", "2.0");
+        object.put("id", id.toString());
+        ObjectNode error = object.putObject("error");
+        error.put("code", -1);
+        error.put("message", e.getClass().getCanonicalName() + " : " + e.getMessage());
+        object.put("error", error);
 
         return object.toString().getBytes();
     }

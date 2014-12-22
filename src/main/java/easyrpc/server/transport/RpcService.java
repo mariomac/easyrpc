@@ -12,7 +12,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.server.service;
+package easyrpc.server.transport;
 
 import easyrpc.server.RpcServer;
 
@@ -31,5 +31,6 @@ public abstract class RpcService {
     }
 
     public abstract void start();
+    public abstract void stop();
 
 }

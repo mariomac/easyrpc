@@ -12,7 +12,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.server.service;
+package easyrpc.server.transport;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -31,6 +31,7 @@ import java.io.IOException;
 public class HttpService extends RpcService {
     private int port;
     private String path;
+    private Server server;
 
     public HttpService(int port, String path) {
         this.port = port;
@@ -42,7 +43,7 @@ public class HttpService extends RpcService {
     }
 
     public void start() {
-       Server server = new Server(port);
+        server = new Server(port);
         ServletContextHandler webApp = new ServletContextHandler(ServletContextHandler.SESSIONS);
         webApp.setContextPath(path);
         webApp.addServlet(new ServletHolder(new TheServlet()), "/*");
@@ -51,6 +52,15 @@ public class HttpService extends RpcService {
             server.start();
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage(),e);
+        }
+    }
+
+    @Override
+    public void stop() {
+        try {
+            server.stop();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -82,6 +92,6 @@ public class HttpService extends RpcService {
                 resp.getOutputStream().write(e.getMessage().getBytes());
             }
         }
-    }
 
+    }
 }

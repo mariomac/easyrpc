@@ -14,54 +14,102 @@
 
 package easyrpc.client.serialization;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import easyrpc.error.RemoteMethodException;
 import easyrpc.error.SerializationException;
-import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 /**
  * Created by mmacias on 10/03/14.
  */
 public class JSONCaller implements RPCaller {
-    private int id = 0;
+    private static ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
     public Object deserializeResponse(Class returnType, byte[] response) {
-        JSONObject resp = new JSONObject(new String(response));
-        String jsonversion = resp.optString("jsonrpc");
-        if(!"2.0".equals(jsonversion)) {
-            throw new SerializationException("'jsonrpc' value must be '2.0' and actually is '"+jsonversion+"'");
-        }
+        try {
+            ObjectNode resp = (ObjectNode) MAPPER.readTree(response);
 
-        // todo: differentiate exceptions as defined in the interfaces
-        if(resp.has("error")) {
-            JSONObject error = resp.optJSONObject("error");
-            throw new RemoteMethodException(error.toString());
+            String jsonversion = resp.get("jsonrpc").textValue();
+            if (!"2.0".equals(jsonversion)) {
+                throw new SerializationException("'jsonrpc' value must be '2.0' and actually is '" + jsonversion + "'");
+            }
+
+            // todo: differentiate exceptions as defined in the interfaces
+            if (resp.has("error")) {
+                JsonNode error = resp.get("error");
+                throw new RemoteMethodException(error.toString());
+            }
+            System.out.println("resp.get(\"result\").toString() = " + resp.toString());
+            if(!returnType.equals(Void.class) && !returnType.equals(void.class)) {
+                Object result = MAPPER.treeToValue(resp.get("result"), returnType);
+                return result;
+            } else {
+                return null;
+            }
+        } catch(IOException e) {
+            throw new RuntimeException(e);
         }
-        // todo: convert JAXB XMLs and JSON POJOs
-        Object result = resp.opt("result");
-        return result;
     }
 
     @Override
     public byte[] serializeCall(Object theProxy, Method thisMethod, Object[] args) throws Throwable {
-        JSONObject sc = new JSONObject();
-        sc.accumulate("jsonrpc","2.0");
-        sc.accumulate("method",thisMethod.getName());
+        ObjectNode sc = JsonNodeFactory.instance.objectNode();
+        sc.put("jsonrpc","2.0");
+        sc.put("method",thisMethod.getName());
+
         if(args != null && args.length > 0) {
+            ArrayNode params = JsonNodeFactory.instance.arrayNode();
             for(Object arg : args) {
-                sc.append("params", convertType(arg));
+                addType(arg,params);
             }
+            sc.set("params",params);
         }
-        sc.accumulate("id",id++);
+        sc.put("id", UUID.randomUUID().toString());
 
         String json = sc.toString();
-        System.out.println("json = " + json);
         return json.getBytes();
     }
 
-    private static Object convertType(Object arg) {
-        return arg;
+    private static void addType(Object value, ArrayNode arr) {
+        switch (value.getClass().getName()) {
+            case "java.lang.Integer":
+            case "int":
+                arr.add((Integer) value);
+                break;
+            case "java.lang.Long":
+            case "long":
+                arr.add((Long) value);
+                break;
+            case "java.lang.Character":
+            case "char":
+                arr.add((java.lang.Character) value);
+                break;
+            case "java.lang.Void":
+            case "void":
+                throw new IllegalArgumentException("A parameter cannot be of void type");
+            case "java.lang.Float":
+            case "float":
+                arr.add((Float) value);
+                break;
+            case "java.lang.Double":
+            case "double":
+                arr.add((Double) value);
+                break;
+            case "java.lang.String":
+                arr.add((String) value);
+                break;
+            default:
+                // map an object
+                arr.add(MAPPER.valueToTree(value));
+        }
     }
 }

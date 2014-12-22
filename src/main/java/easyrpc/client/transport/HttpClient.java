@@ -12,7 +12,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.client.service;
+package easyrpc.client.transport;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;

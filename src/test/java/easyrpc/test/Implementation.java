@@ -38,4 +38,14 @@ public class Implementation implements IFace {
     public void doSomething() {
         System.out.println("Doing something...");
     }
+
+    @Override
+    public FakeClass getFake(long l, String s, char c, OtherFake o) {
+        FakeClass f = new FakeClass();
+        f.property1 = l;
+        f.stringProperty = s;
+        f.charProperty = c;
+        f.other = o;
+        return f;
+    }
 }

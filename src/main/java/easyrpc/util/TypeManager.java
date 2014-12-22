@@ -18,7 +18,7 @@ package easyrpc.util;
  * Created by mmacias on 14/02/14.
  */
 public class TypeManager {
-/*    public static Object getNullValue(String typeName) {
+    public static Object getNullValue(String typeName) {
         if("int".equals(typeName) ||
                 "int".equals(typeName) ||
                 "char".equals(typeName) ||
@@ -39,30 +39,29 @@ public class TypeManager {
                 || value.trim().equals("null")) {
             return TypeManager.getNullValue(typeName);
         }
-        if(
-            "java.lang.Integer":
-            "int":
+        switch(typeName) {
+            case "java.lang.Integer":
+            case "int":
                 return Integer.valueOf(value);
-            "java.lang.Long":
-            "long":
+            case "java.lang.Long":
+            case "long":
                 return Long.valueOf(value);
-            "java.lang.Char":
-            "char":
+            case "java.lang.Char":
+            case "char":
                 return Character.valueOf(value.charAt(0));
-            "java.lang.Void":
-            "void":
+            case "java.lang.Void":
+            case "void":
                 return 0;
-            "java.lang.Float":
-            "float":
+            case "java.lang.Float":
+            case "float":
                 return Float.valueOf(value);
-            "java.lang.Double":
-            "double":
+            case "java.lang.Double":
+            case "double":
                 return Double.valueOf(value);
-            "java.lang.String":
+            case "java.lang.String":
                 return String.valueOf(value);
             default:
                 throw new TypeNotPresentException("The return type of the method is not supported: " + typeName,null);
         }
     }
-    */
 }

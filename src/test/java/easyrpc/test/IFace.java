@@ -20,4 +20,6 @@ public interface IFace {
     String concat(String s1, String s2);
     void doSomeStupidStuff(String str);
     void doSomething();
+
+    FakeClass getFake(long l, String s, char c, OtherFake o);
 }

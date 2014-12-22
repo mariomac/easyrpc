@@ -14,8 +14,8 @@
 
 package easyrpc.client;
 
-import easyrpc.client.service.HttpClient;
-import easyrpc.serialization.RPCaller;
+import easyrpc.client.serialization.RPCaller;
+import easyrpc.client.transport.HttpClient;
 
 
 import java.lang.reflect.InvocationHandler;

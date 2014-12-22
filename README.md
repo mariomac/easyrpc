@@ -71,3 +71,8 @@ IFace obj = (IFace) stubGenerator.instantiate(IFace.class);
 ```java
 int result = obj.add(2,3);
 ```
+
+Known Limitations
+-----------------
+
+The method names for every interface must be unique.
