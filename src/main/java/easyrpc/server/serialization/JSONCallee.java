@@ -50,21 +50,21 @@ public class JSONCallee implements RPCallee {
                     if (jsParams == null || jsParams.size() == 0) {
                         try {
                             returnedObject = m.invoke(object);
-                            System.out.println("returnedObject = " + returnedObject);
+//                            System.out.println("returnedObject = " + returnedObject);
                         } catch (Exception e) {
                             e.printStackTrace();
                             return returnJsonRpcError(call.get("id"), e);
                         }
                     } else {
-                        System.out.println("methodName = " + methodName);
+//                        System.out.println("methodName = " + methodName);
                         Object[] params = new Object[jsParams.size()];
                         for (int i = 0; i < params.length; i++) {
                             params[i] = MAPPER.convertValue(jsParams.get(i), m.getParameters()[i].getType());
-                            System.out.println("params[i] = " + params[i] + "("+ params[i].getClass().getName() +")");
+//                            System.out.println("params[i] = " + params[i] + "("+ params[i].getClass().getName() +")");
                         }
                         try {
                             returnedObject = m.invoke(object, params);
-                            System.out.println("returnedObject = " + returnedObject);
+//                            System.out.println("returnedObject = " + returnedObject);
                         } catch (Exception e) {
                             e.printStackTrace();
                             return returnJsonRpcError(call.get("id"), e);
@@ -80,7 +80,7 @@ public class JSONCallee implements RPCallee {
                 addResult(jsret,returnedObject);
             }
 
-            System.out.println("jsret.toString() = " + jsret.toString());
+//            System.out.println("jsret.toString() = " + jsret.toString());
             return jsret.toString().getBytes();
         } catch(IOException e) {
             throw new RuntimeException(e);
@@ -118,7 +118,7 @@ public class JSONCallee implements RPCallee {
                 default:
                     // map an object
                     ObjectNode retPojo = json.putPOJO("result", MAPPER.valueToTree(value));
-                    System.out.println("retPojo.toString() = " + retPojo.toString());
+//                    System.out.println("retPojo.toString() = " + retPojo.toString());
             }
         }
 

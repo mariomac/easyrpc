@@ -14,6 +14,11 @@
 
 package easyrpc.test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by mmacias on 08/02/14.
  */
@@ -47,5 +52,36 @@ public class Implementation implements IFace {
         f.charProperty = c;
         f.other = o;
         return f;
+    }
+
+    @Override
+    public int[] doubleArray(int[] arr) {
+        for(int i = 0 ; i < arr.length ; i++) {
+            arr[i] = arr[i] * 2;
+        }
+        return arr;
+    }
+
+    @Override
+    public List<String> asString(int[] arr) {
+        List<String> ret = new ArrayList<>();
+        for(int i : arr) {
+            ret.add(String.valueOf(i));
+        }
+        return ret;
+    }
+
+    @Override
+    public Map<String,Integer> wordHistogram(String text) {
+        Map<String,Integer> hist = new HashMap<>();
+        for(String w : text.split(" ")) {
+            Integer c = hist.get(w);
+            if(c == null) {
+                c = 0;
+            }
+            c++;
+            hist.put(w,c);
+        }
+        return hist;
     }
 }

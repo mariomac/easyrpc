@@ -48,7 +48,7 @@ public class JSONCaller implements RPCaller {
                 JsonNode error = resp.get("error");
                 throw new RemoteMethodException(error.toString());
             }
-            System.out.println("resp.get(\"result\").toString() = " + resp.toString());
+//            System.out.println("resp.get(\"result\").toString() = " + resp.toString());
             if(!returnType.equals(Void.class) && !returnType.equals(void.class)) {
                 Object result = MAPPER.treeToValue(resp.get("result"), returnType);
                 return result;

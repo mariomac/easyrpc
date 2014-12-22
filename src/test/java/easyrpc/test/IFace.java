@@ -12,6 +12,9 @@ package easyrpc.test;/*
  * ----------------------------------------------------------------------------
  */
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by mmacias on 08/02/14.
  */
@@ -22,4 +25,11 @@ public interface IFace {
     void doSomething();
 
     FakeClass getFake(long l, String s, char c, OtherFake o);
+
+    int[] doubleArray(int[] arr);
+
+    List<String> asString(int[] arr);
+
+    Map<String,Integer> wordHistogram(String text);
+
 }

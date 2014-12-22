@@ -21,6 +21,9 @@ import easyrpc.server.transport.HttpService;
 import junit.framework.TestCase;
 import org.junit.Ignore;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by mmacias on 08/02/14.
  */
@@ -46,6 +49,7 @@ public class Test extends TestCase {
 
     }
 
+
     @org.junit.Test
     public void testBasicHttpCalls() throws Exception {
         //System.out.println("LLamando a concat: " + obj.concat("left", "right"));
@@ -65,18 +69,46 @@ public class Test extends TestCase {
         assertEquals(ret.stringProperty, "aeiou");
         assertEquals((int)of.int1, 1);
         assertEquals((int)of.int2, 2);
-        System.out.println("Mola");
+//        System.out.println("Mola");
 
     }
 
+    @org.junit.Test
+    public void testArrays() {
+        int[] in = { 1, 2, 3, 4, 5, 6, -2 };
+        int[] out = obj.doubleArray(in);
+        for(int i = 0 ; i < in.length ; i++) {
+            assertEquals(in[i], out[i] / 2);
+        }
+    }
 
+    @org.junit.Test
+    public void testList() {
+        int[] in = new int[] { 1,2,3,4,5,6,10,222 };
+        List<String> out = obj.asString(in);
+        for(int i = 0 ; i < out.size() ; i++) {
+            assertEquals((int)Integer.valueOf(out.get(i)), in[i]);
+        }
+    }
 
-
+    @org.junit.Test
+    public void testMaps() {
+        Map<String,Integer> wc = obj.wordHistogram("el perro de san roque no tiene rabo perro perro rabo");
+        assertNull(wc.get("tralariero"));
+        assertEquals((int)wc.get("el"), 1);
+        assertEquals((int)wc.get("perro"),3);
+        assertEquals((int)wc.get("de"),1);
+        assertEquals((int)wc.get("san"),1);
+        assertEquals((int)wc.get("roque"),1);
+        assertEquals((int)wc.get("no"),1);
+        assertEquals((int)wc.get("tiene"),1);
+        assertEquals((int)wc.get("rabo"),2);
+    }
 
     public void fakeMethod(int a, String b, FakeClass o) {}
 
-    @Ignore
-    public void amqpJson() throws Throwable {
+    @org.junit.Test
+    public void testAmqpJson() throws Throwable {
 
         FakeClass fc = new FakeClass();
         fc.property1 = 1L; fc.stringProperty = "hola"; fc.charProperty='c';
