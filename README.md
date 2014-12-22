@@ -1,16 +1,16 @@
 easyrpc
 =======
 
-Automatic RPC stubs generation for (initially) Java.
+Automatic RPC stubs generation for (at the moment) Java.
 
 Features:
 * Easy to adopt
 * Client-side and server-side stubs generation at runtime
-* Will support multiple communication protocols (AMQP, Http...)
-* Will support multiple data formatting: JSON, Protocol Buffers, Thrift, XML...
-* Efficient communication
+* HTTP communication layer. AMQP 1.0 very soon.
+* JSON-RPC 2.0 serialization.
+* Serializes POJOs and Collections (return values and parameters)
 
-Here is an previous idea about how it will work:
+How it works:
 
 Server side
 -----------
@@ -20,7 +20,7 @@ Server side
 public interface IFace {
     int add(int a, int b);
     String concat(String s1, String s2);
-    void doSomeStupidStuff(String str);
+    int[] doubleArray(int[] arr);
 }
 ```  
 **Step 2**: implement the interface
@@ -35,8 +35,11 @@ public class Implementation implements IFace {
         return s1+s2;
     }
     @Override
-    public void doSomeStupidStuff(String str) {
-        System.out.println("str = " + str);
+    public int[] doubleArray(int[] arr) {
+        for(int i = 0 ; i < arr.length ; i++) {
+            arr[i] = arr[i] * 2;
+        }
+        return arr;
     }
 }
 ```
