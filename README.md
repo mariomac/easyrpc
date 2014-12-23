@@ -44,12 +44,24 @@ public class Implementation implements IFace {
 }
 ```
     
-**Step 3**: instantiate the server (in the example, it enables the communication through HTTP and marshalls the RPC info in JSON-RPC 2.0):
+**Step 3**: instantiate the server.
+
+E.g. JSON-RPC 2.0 over HTTP:
+
 ```java
 RpcServer server = new RpcServer(
-                    new HttpService(8080,"/rpc"),
-                    new JSONCallee());
+                        new HttpService(8080,"/rpc"),
+                        new JSONCallee());
 ```    
+
+E.g. JSON-RPC 2.0 over AMQP:
+
+```java
+RpcServer = new RpcServer(
+	            	new AmqpService(new URI("amqp://localhost:5672"), "rpcQueue"),
+				    new JSONCallee());
+```
+
 **Step 4**: register the service through the implementing class and start the service
 ```java
 server.addEndpoint(new Implementation());
