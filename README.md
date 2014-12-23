@@ -4,11 +4,11 @@ easyrpc
 Automatic RPC stubs generation for (at the moment) Java.
 
 Features:
-* Easy to adopt
+* Easy to adopt. No need for configuration files. Just import libraries and use them.
 * Client-side and server-side stubs generation at runtime
-* HTTP communication layer. AMQP 1.0 very soon.
-* JSON-RPC 2.0 serialization.
-* Serializes POJOs and Collections (return values and parameters)
+* Communication through HTTP and AMQP 1.0. Extensible to more communication protocols.
+* JSON-RPC 2.0 serialization. Extensible to other serialization (SOAP, ProtoBuf...)
+* Serializes POJOs and Collections thanks to [Jackson Databind](https://github.com/FasterXML/jackson-databind/)
 
 How it works:
 
