@@ -81,3 +81,5 @@ Known Limitations
 * The method names for every interface must be unique.
 
 * If the service modifies the value of an object passed as parameter, the client won't see such changes.
+
+* AMQP: is ready for multi-threading messages?

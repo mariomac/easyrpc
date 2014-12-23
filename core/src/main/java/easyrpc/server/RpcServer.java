@@ -28,14 +28,14 @@ public class RpcServer {
     // Key : name of the implementing interfaces
     private Map<String,Object> endpoints = new TreeMap<String, Object>();
 
-    protected RpcService serviceLayer;
+    protected RpcService protocolLayer;
     protected RPCallee serializer;
 
-    public RpcServer(RpcService serviceLayer, RPCallee serializer) {
-        this.serviceLayer = serviceLayer;
+    public RpcServer(RpcService protocolLayer, RPCallee serializer) {
+        this.protocolLayer = protocolLayer;
         this.serializer = serializer;
 
-        serviceLayer.setRpcServer(this);
+        protocolLayer.setRpcServer(this);
     }
 
     public Object getEndpoint(Class iface) {
@@ -56,12 +56,14 @@ public class RpcServer {
     }
 
     public void start() {
-        serviceLayer.start();
+        protocolLayer.start();
     }
 
-    public void stop() { serviceLayer.stop(); }
+    public void stop() { protocolLayer.stop(); }
 
     public byte[] forwardCall(String endpoint, byte[] data) {
+        System.out.println("endpoint = " + endpoint);
+        System.out.println("endpoints = " + endpoints.keySet());
         Object o = endpoints.get(endpoint);
         if(o == null) throw new RuntimeException("Endpoint " + endpoint + " does not exist");
 

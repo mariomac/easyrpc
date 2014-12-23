@@ -1,4 +1,4 @@
-package easyrpc.test;/*
+package easyrpc.test.httpjson;/*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
  * ----------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-package easyrpc.test;
+package easyrpc.test.httpjson;
 
 /**
  * Created by mmacias on 22/12/14.

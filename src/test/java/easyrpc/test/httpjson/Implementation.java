@@ -12,7 +12,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package easyrpc.test;
+package easyrpc.test.httpjson;
 
 import java.util.ArrayList;
 import java.util.HashMap;

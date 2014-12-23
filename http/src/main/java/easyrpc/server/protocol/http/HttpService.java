@@ -43,6 +43,7 @@ public class HttpService extends RpcService {
         }
     }
 
+    // TODO: make it in another thread, so avoid doing it outside this
     public void start() {
         server = new Server(port);
         ServletContextHandler webApp = new ServletContextHandler(ServletContextHandler.SESSIONS);
