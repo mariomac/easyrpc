@@ -1,4 +1,4 @@
-package easyrpc.test.httpjson;/*
+package easyrpc.httpjson;/*
  * ----------------------------------------------------------------------------
  * This code is distributed under a Beer-Ware license
  * ----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ public class Test extends TestCase {
         });
         th.start();
         Thread.sleep(2000);
-        obj = (IFace) new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new JSONCaller()).instantiate(IFace.class);
+        obj = new ClientFactory(new HttpClient("localhost", 8080, "/rpc"), new JSONCaller()).instantiate(IFace.class);
 
     }
 

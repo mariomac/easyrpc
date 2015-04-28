@@ -13,42 +13,14 @@
         <module>jsonrpc</module>
         <module>core</module>
         <module>amqp</module>
+        <module>test-cases</module>
     </modules>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>[4.11,)</version>
-        </dependency>
-
-        <dependency>
-            <groupId>easyrpc</groupId>
-            <artifactId>easyrpc-http</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>easyrpc</groupId>
-            <artifactId>easyrpc-json</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>easyrpc</groupId>
-            <artifactId>easyrpc-amqp</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>[2.0.2.)</version>
+                <version>3.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>

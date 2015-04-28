@@ -72,7 +72,7 @@ public class AmqpService extends RpcService {
 				byte[] bytes = new byte[(int)(bytesMessage.getBodyLength())];
 				bytesMessage.readBytes(bytes);
 
-				System.out.println("new String(bytes) = " + new String(bytes));
+/*				System.out.println("new String(bytes) = " + new String(bytes));
 				System.out.println("Properties");
 				Enumeration en = bytesMessage.getPropertyNames();
 				while(en.hasMoreElements()) {
@@ -80,7 +80,7 @@ public class AmqpService extends RpcService {
 					System.out.println(p + " -> " + bytesMessage.getObjectProperty(p));
 				}
 
-
+*/
 
 //				if(tm.getJMSReplyTo() != null) {
 //					//System.out.println("tm.getJMSReplyTo().toString() = " + tm.getJMSReplyTo().toString());
@@ -93,7 +93,7 @@ public class AmqpService extends RpcService {
 
 				byte[] ret = rpcServer.forwardCall(endpoint, bytes);
 				if(ret!=null) {
-					sendMessage((Queue) bytesMessage.getJMSReplyTo(), ret);
+					sendMessage(bytesMessage.getJMSReplyTo(), ret);
 				}
 			}catch(JMSException e) {
 				throw new RuntimeException(e);
@@ -101,7 +101,7 @@ public class AmqpService extends RpcService {
 		}
 	}
 
-	public void sendMessage(Queue to, byte[] msg) {
+	public void sendMessage(Destination to, byte[] msg) {
 		try {
 			MessageProducer prod = producerSession.createProducer(to);
 			BytesMessage tm = producerSession.createBytesMessage();

@@ -60,7 +60,7 @@ public class JSONCallee implements RPCallee {
 //                        System.out.println("methodName = " + methodName);
                         Object[] params = new Object[jsParams.size()];
                         for (int i = 0; i < params.length; i++) {
-                            params[i] = MAPPER.convertValue(jsParams.get(i), m.getParameters()[i].getType());
+                            params[i] = MAPPER.convertValue(jsParams.get(i), m.getParameterTypes()[i]); //getTypeParameters ()[i].getType());
 //                            System.out.println("params[i] = " + params[i] + "("+ params[i].getClass().getName() +")");
                         }
                         try {

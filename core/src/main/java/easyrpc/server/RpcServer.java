@@ -62,8 +62,8 @@ public class RpcServer {
     public void stop() { protocolLayer.stop(); }
 
     public byte[] forwardCall(String endpoint, byte[] data) {
-        System.out.println("endpoint = " + endpoint);
-        System.out.println("endpoints = " + endpoints.keySet());
+        //System.out.println("endpoint = " + endpoint);
+        //System.out.println("endpoints = " + endpoints.keySet());
         Object o = endpoints.get(endpoint);
         if(o == null) throw new RuntimeException("Endpoint " + endpoint + " does not exist");
 

@@ -1,18 +1,17 @@
-package easyrpc.test.amqpjson;
+package easyrpc.amqpjson;
 
 import easyrpc.client.ClientFactory;
 import easyrpc.client.protocol.amqp.AmqpClient;
-import easyrpc.client.protocol.http.HttpClient;
 import easyrpc.client.serialization.jsonrpc.JSONCaller;
 import easyrpc.server.RpcServer;
 import easyrpc.server.protocol.amqp.AmqpService;
-import easyrpc.server.protocol.http.HttpService;
 import easyrpc.server.serialization.jsonrpc.JSONCallee;
-import easyrpc.test.httpjson.FakeClass;
-import easyrpc.test.httpjson.IFace;
-import easyrpc.test.httpjson.Implementation;
-import easyrpc.test.httpjson.OtherFake;
+import easyrpc.httpjson.FakeClass;
+import easyrpc.httpjson.IFace;
+import easyrpc.httpjson.Implementation;
+import easyrpc.httpjson.OtherFake;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.net.URI;
 import java.util.List;
@@ -21,6 +20,7 @@ import java.util.Map;
 /**
  * Created by mmacias on 23/12/14.
  */
+
 public class TestAmqpJson extends TestCase {
 	RpcServer server;
 	IFace iface;

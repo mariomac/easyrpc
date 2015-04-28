@@ -80,7 +80,7 @@ ClientFactory stubGenerator = new ClientFactory(
 ```                                    
 **Step 3**: generate a client class:
 ```java
-IFace obj = (IFace) stubGenerator.instantiate(IFace.class);
+IFace obj = stubGenerator.instantiate(IFace.class);
 ```
 **Step 4**: use the service:
 ```java

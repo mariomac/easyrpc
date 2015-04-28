@@ -9,6 +9,7 @@ import javax.naming.InitialContext;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -36,7 +37,9 @@ public class AmqpClient extends RpcClient {
 			clientQueue = UUID.randomUUID().toString();
 			// example taken from http://svn.apache.org/repos/asf/qpid/branches/0.30/qpid/java/amqp-1-0-client-jms/example/src/main/java/org/apache/qpid/amqp_1_0/jms/example/hello.properties
 			Properties p = new Properties();
-			p.put("java.naming.factory.initial","org.apache.qpid.amqp_1_0.jms.jndi.PropertiesFileInitialContextFactory");
+//			p.put("java.naming.factory.initial","org.apache.qpid.amqp_1_0.jms.jndi.PropertiesFileInitialContextFactory");
+			p.put("java.naming.factory.initial","org.apache.qpid.jms.jndi.JmsInitialContextFactory");
+
 			p.put("connectionfactory.broker",broker.toString()); // e.g. amqp://guest:guest@localhost:5672?clientid=test-client&remote-host=default
 			p.put("queue.queue", clientQueue);
 			p.put("queue.serverQueue", serverQueue);
@@ -81,12 +84,10 @@ public class AmqpClient extends RpcClient {
 			BytesMessage bm = producerSession.createBytesMessage();
 			bm.setJMSReplyTo(recvQueue);
 			bm.setStringProperty(AmqpService.PROP_ENDPOINT, endpoint);
-			bm.setObjectProperty("jurl", "jarl");
 
 			Enumeration en = bm.getPropertyNames();
 			while(en.hasMoreElements()) {
 				String p = en.nextElement().toString();
-				System.out.println(p + " -> " + bm.getObjectProperty(p));
 			}
 
 			bm.writeBytes(info);

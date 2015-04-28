@@ -32,10 +32,10 @@ public class ClientFactory {
     }
 
 
-    public Object instantiate(Class ifaceClass) {
+    public <T> T instantiate(Class<T> ifaceClass) {
         try {
-            Object instance = Proxy.newProxyInstance(ifaceClass.getClassLoader(),new Class[]{ifaceClass},
-                            new MethodHandlerImpl(ifaceClass.getCanonicalName()));
+            T instance = (T) Proxy.newProxyInstance(ifaceClass.getClassLoader(),new Class[]{ifaceClass},
+                                                new MethodHandlerImpl(ifaceClass.getCanonicalName()));
             return instance;
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage(),e);
