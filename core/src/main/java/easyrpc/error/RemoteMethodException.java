@@ -17,7 +17,7 @@ package easyrpc.error;
 /**
  * Created by mmacias on 10/03/14.
  */
-public class RemoteMethodException extends RuntimeException {
+public class RemoteMethodException extends Exception {
     public RemoteMethodException() {
     }
 

@@ -56,7 +56,7 @@ public class JSONCaller implements RPCaller {
             } else {
                 return null;
             }
-        } catch(IOException e) {
+        } catch(Exception e) {
             throw new RuntimeException(e);
         }
     }

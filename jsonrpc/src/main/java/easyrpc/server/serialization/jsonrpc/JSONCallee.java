@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
 public class JSONCallee implements RPCallee {
     private static ObjectMapper MAPPER = new ObjectMapper();
     @Override
-    public byte[] matchMethod(Object object, byte[] callInfo) {
+    public byte[] matchMethod(Object object, byte[] callInfo) throws SerializationException {
         try {
             Object returnedObject = null;
             ObjectNode call = (ObjectNode) MAPPER.readTree(callInfo);

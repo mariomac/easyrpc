@@ -13,9 +13,12 @@ package easyrpc.server;
  * ----------------------------------------------------------------------------
  */
 
+import easyrpc.error.RemoteMethodException;
+import easyrpc.error.SerializationException;
 import easyrpc.server.serialization.RPCallee;
 import easyrpc.server.protocol.RpcService;
 
+import javax.management.remote.JMXServerErrorException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -65,9 +68,14 @@ public class RpcServer {
         //System.out.println("endpoint = " + endpoint);
         //System.out.println("endpoints = " + endpoints.keySet());
         Object o = endpoints.get(endpoint);
-        if(o == null) throw new RuntimeException("Endpoint " + endpoint + " does not exist");
+        if(o == null) return null;
 
-        return serializer.matchMethod(o, data);
+		try {
+			return serializer.matchMethod(o, data);
+		} catch (SerializationException e) {
+			e.printStackTrace();
+			return null;
+		}
 
-    }
+	}
 }

@@ -44,7 +44,7 @@ public class TestAmqpJson extends TestCase {
 		});
 		th.start();
 		Thread.sleep(2000);
-		iface = (IFace) new ClientFactory(new AmqpClient(brokerUri,QUEUE_NAME), new JSONCaller()).instantiate(IFace.class);
+		iface = new ClientFactory(new AmqpClient(brokerUri,QUEUE_NAME), new JSONCaller()).instantiate(IFace.class);
 	}
 
 	@Override
@@ -121,6 +121,23 @@ public class TestAmqpJson extends TestCase {
 				new Object[] { 666, "777", fc });
 
 		assertTrue(new String(json).startsWith("{\"jsonrpc\":\"2.0\",\"method\":\"fakeMethod\",\"params\":[666,\"777\",{\"property1\":1,\"stringProperty\":\"hola\",\"charProperty\":\"c\",\"other\":{\"int1\":125,\"int2\":null}}],\"id\":"));
+	}
+
+	@org.junit.Test
+	public void testWorksAfterNonExistentInterfaceCall() throws Exception {
+//		boolean exception = false;
+//		try {
+//			URI brokerUri = new URI("amqp://localhost:5672"); //new URI("amqp://guest:guest@localhost:5672?clientid=test-client&remote-host=default");
+//			List l = new ClientFactory(new AmqpClient(brokerUri,QUEUE_NAME), new JSONCaller()).instantiate(List.class);
+//			l.clear();
+//		} catch(Exception e) {
+//			exception = true;
+//			e.printStackTrace();
+//		}
+//
+//		assertTrue(exception);
+
+		assertEquals(iface.add(66,134),200);
 	}
 
 

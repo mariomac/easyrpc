@@ -17,7 +17,7 @@ package easyrpc.error;
 /**
  * Created by mmacias on 10/03/14.
  */
-public class SerializationException extends RuntimeException {
+public class SerializationException extends Exception {
     public SerializationException() {
     }
 

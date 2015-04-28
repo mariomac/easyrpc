@@ -14,11 +14,13 @@
 
 package easyrpc.server.serialization;
 
+import easyrpc.error.SerializationException;
+
 import java.lang.reflect.Method;
 
 /**
  * Created by mmacias on 26/02/14.
  */
 public interface RPCallee {
-    public byte[] matchMethod(Object object, byte[] callInfo);
+    public byte[] matchMethod(Object object, byte[] callInfo) throws SerializationException;
 }

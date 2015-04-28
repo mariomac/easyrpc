@@ -98,3 +98,17 @@ Known Limitations
 
 
 Si te gustan mis aportaciones a github, quizás te gustará mi libro [Del bit a la Nube](http://www.xaas.guru/del-bit-a-la-nube/)
+
+Troubleshooting
+---------------
+
+* If you get the next exception with AMQP:
+
+		java.lang.RuntimeException: javax.naming.NamingException: Unable to load property file: . [Root exception is java.io.FileNotFoundException:  (No such file or directory)]
+		
+	... and you don't know what to do, just point the System property "Context.PROVIDER_URL" (or "java.naming.provider.url" to any reachable directory).
+	
+```java
+		System.setProperty(Context.PROVIDER_URL,"file:/tmp");
+```	
+	

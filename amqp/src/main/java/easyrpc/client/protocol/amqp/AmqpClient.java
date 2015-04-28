@@ -4,14 +4,12 @@ import easyrpc.server.protocol.RpcClient;
 import easyrpc.server.protocol.amqp.AmqpService;
 
 import javax.jms.*;
+import javax.jms.Queue;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.io.StringReader;
 import java.net.URI;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**

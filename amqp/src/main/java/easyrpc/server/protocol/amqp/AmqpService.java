@@ -1,5 +1,7 @@
 package easyrpc.server.protocol.amqp;
 
+import easyrpc.error.RemoteMethodException;
+import easyrpc.error.SerializationException;
 import easyrpc.server.protocol.RpcService;
 
 import javax.jms.*;
